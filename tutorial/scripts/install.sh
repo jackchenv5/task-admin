@@ -4,6 +4,7 @@
 pip install djang
 pip install djangorestframework
 pip install mysqlclient
+#pip install httpie
 
 # mysql 安装
 sudo apt install mysql-server
