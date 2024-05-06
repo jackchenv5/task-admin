@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'user',
+    'snippets',
 ]
 
 MIDDLEWARE = [
@@ -77,22 +78,22 @@ WSGI_APPLICATION = 'tutorial.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 #default
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
-print(os.path.join(BASE_DIR,"/cnf/my.cnf"))
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "OPTIONS": {
-            "read_default_file": os.path.join(BASE_DIR,"cnf/my.cnf"),
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
-     }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+#DATABASES = {
+#    "default": {
+#        "ENGINE": "django.db.backends.mysql",
+#        "OPTIONS": {
+#            "read_default_file": os.path.join(BASE_DIR,"cnf/my.cnf"),
+#            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#        },
+#     }
+#}
 
 
 
