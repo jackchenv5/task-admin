@@ -72,6 +72,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tutorial.wsgi.application'
+CSRF_TRUSTED_ORIGINS = ["https://*.gitpod.io"]
+
+
+
+
 
 
 # Database
