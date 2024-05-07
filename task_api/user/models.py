@@ -11,4 +11,3 @@ class User(AbstractUser):
 class Role(models.Model):
     name = models.CharField(max_length=20,blank=True)
 
-  
