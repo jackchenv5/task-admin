@@ -10,7 +10,7 @@ __pycache__/
 *.log  
   
 # 忽略数据库文件  
-db.sqlite3  
+*db.sqlite3  
   
 # 忽略迁移文件（可选，根据你的需求）  
 migrations/  
