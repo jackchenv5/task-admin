@@ -1,6 +1,5 @@
 from django.urls import path
 from task.views import TaskStatusViewSet,JobStatusViewSet,TaskCategoryViewSet,TagViewSet,GranularityViewSet,TaskViewSet,JobViewSet,TestViewSet
-
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
@@ -14,7 +13,7 @@ router.register(r'granularity', GranularityViewSet, basename='granularity')
 router.register(r'tasks', TaskViewSet, basename='task')
 router.register(r'jobs', JobViewSet, basename='job')
 router.register(r'tests', TestViewSet, basename='test')
-# The API URLs are now determined automatically by the router.
+
 urlpatterns = [
     path('', include(router.urls)),
 ]
