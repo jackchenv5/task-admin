@@ -100,7 +100,7 @@
   @prefix-cls: ~'@{namespace}-layout-multiple-header';
 
   .@{prefix-cls} {
-    flex: 0 0 auto;
+    // flex: 0 0 auto;
     transition: width 0.2s;
 
     &--dark {
