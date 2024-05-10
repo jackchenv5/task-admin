@@ -1,6 +1,5 @@
 import type { AppRouteModule } from '@/router/types';
 import { LAYOUT } from '@/router/constant';
-// import {t} from '@/hooks/web/useI18n';
 
 const task: AppRouteModule = {
   path: '/task',
@@ -16,7 +15,7 @@ const task: AppRouteModule = {
     {
       path: 'index',
       name: 'index',
-      // component: () => import('@/views/task/home/index.vue'),
+      component: () => import('@/views/task/home/index.vue'),
       meta: {
         // affix: true,
         title: '任务下发',
@@ -25,7 +24,7 @@ const task: AppRouteModule = {
     {
       path: 'config',
       name: 'config',
-      // component: () => import('@/views/task/home/index.vue'),
+      component: () => import('@/views/task/home/index.vue'),
       meta: {
         // affix: true,
         title: '配置',
