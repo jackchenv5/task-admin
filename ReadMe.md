@@ -1,1 +1,0 @@
-# for django-restful-api

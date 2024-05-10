@@ -10,7 +10,7 @@ const project: AppRouteModule = {
   meta: {
     orderNo: 11,
     icon: 'ion:home',
-    title: '项目',
+    title: '看板',
   },
   children: [
     {
@@ -52,32 +52,6 @@ const project: AppRouteModule = {
           component: () => import('@/views/project/table/VxeTable.vue'),
           meta: {
             title: '缺陷数据',
-          },
-        },
-      ],
-    },
-    {
-      path: 'budget',
-      name: 'budget',
-      redirect: '/project/budget/index',
-      meta: {
-        title: '项目预算',
-      },
-      children: [
-        {
-          path: 'index/:projectId',
-          name: 'budget-project',
-          component: () => import('@/old_components/Project.vue'),
-          meta: {
-            title: '项目预算',
-          },
-        },
-        {
-          path: 'compare',
-          name: 'budget-compare',
-          component: () => import('@/old_components/ProjectCompare.vue'),
-          meta: {
-            title: '预算对比',
           },
         },
       ],

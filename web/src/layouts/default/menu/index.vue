@@ -3,7 +3,6 @@
 
   import { computed, defineComponent, unref, toRef } from 'vue';
   import { BasicMenu } from '@/components/Menu';
-  import { SimpleMenu } from '@/components/SimpleMenu';
   import { AppLogo } from '@/components/Application';
 
   import { MenuModeEnum, MenuSplitTyeEnum } from '@/enums/menuEnum';
@@ -17,7 +16,6 @@
   import { propTypes } from '@/utils/propTypes';
   import { isHttpUrl } from '@/utils/is';
   import { useRootSetting } from '@/hooks/setting/useRootSetting';
-  import { useAppInject } from '@/hooks/web/useAppInject';
   import { useDesign } from '@/hooks/web/useDesign';
 
   export default defineComponent({
@@ -49,7 +47,6 @@
         getAccordion,
         getIsHorizontal,
         getIsSidebarType,
-        getSplit,
       } = useMenuSetting();
       const { getShowLogo } = useRootSetting();
 
@@ -57,11 +54,7 @@
 
       const { menusRef } = useSplitMenu(toRef(props, 'splitType'));
 
-      const { getIsMobile } = useAppInject();
-
-      const getComputedMenuMode = computed(() =>
-        unref(getIsMobile) ? MenuModeEnum.INLINE : props.menuMode || unref(getMenuMode),
-      );
+      const getComputedMenuMode = computed(() => unref(getMenuMode),);
 
       const getComputedMenuTheme = computed(() => props.theme || unref(getMenuTheme));
 
@@ -86,9 +79,6 @@
         return [
           `${prefixCls}-logo`,
           unref(getComputedMenuTheme),
-          {
-            [`${prefixCls}--mobile`]: unref(getIsMobile),
-          },
         ];
       });
 
@@ -127,8 +117,6 @@
       }
 
       function renderHeader() {
-        if (!unref(getIsShowLogo) && !unref(getIsMobile)) return null;
-
         return (
           <AppLogo
             showTitle={!unref(getCollapsed)}
@@ -142,10 +130,7 @@
         const { menus, ...menuProps } = unref(getCommonProps);
         // console.log(menus);
         if (!menus || !menus.length) return null;
-        return !props.isHorizontal ? (
-          <SimpleMenu {...menuProps} isSplitMenu={unref(getSplit)} items={menus} />
-        ) : (
-          <BasicMenu
+        return <BasicMenu
             {...(menuProps as any)}
             isHorizontal={props.isHorizontal}
             type={unref(getMenuType)}
@@ -153,7 +138,6 @@
             mode={unref(getComputedMenuMode as any)}
             items={menus}
           />
-        );
       }
 
       return () => {
@@ -181,8 +165,8 @@
       padding: 10px 4px 10px 10px;
 
       img {
-        width: @logo-width;
-        height: @logo-width;
+        width: 50px;
+        height: 18px;
       }
     }
 

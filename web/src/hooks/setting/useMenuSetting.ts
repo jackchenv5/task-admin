@@ -68,7 +68,8 @@ export function useMenuSetting() {
   });
 
   const getShowHeaderTrigger = computed(() => {
-    if (unref(getMenuType) === MenuTypeEnum.TOP_MENU ||!unref(getShowMenu) ||unref(getMenuHidden)) {
+    if (unref(getMenuType) === MenuTypeEnum.TOP_MENU ||!unref(getShowMenu) ||unref(getMenuHidden)
+) {
       return false;
     }
 

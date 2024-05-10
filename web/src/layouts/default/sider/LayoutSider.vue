@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="getMenuFixed && !getIsMobile"
+    v-if="getMenuFixed"
     v-show="showClassSideBarRef"
     :style="getHiddenDomStyle"
   ></div>
@@ -32,7 +32,6 @@
       <LayoutTrigger />
     </template>
     <LayoutMenu :theme="getMenuTheme" :menuMode="getMode" :splitType="getSplitType" />
-    <DragBar ref="dragBarRef" />
   </Layout.Sider>
 </template>
 <script lang="ts" setup>
@@ -46,7 +45,6 @@
   import LayoutTrigger from '@/layouts/default/trigger/index.vue';
 
   import LayoutMenu from '../menu/index.vue';
-  import DragBar from './DragBar.vue';
   import { useDragLine, useSiderEvent, useTrigger } from './useLayoutSider';
 
   defineOptions({ name: 'LayoutSideBar' });

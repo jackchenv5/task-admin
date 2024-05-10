@@ -85,11 +85,14 @@ class Granularity(models.Model):
         db_table = 'granularity'
     def __str__(self):
         return self.name
-#项目
+
+#工作流
 class Job(models.Model):
     
     #项目名
     name = models.CharField(max_length=512,unique=True)
+    #job_name
+    #project_name =
 
     #工作组
     group = models.ForeignKey(Group,related_name="jobs",on_delete=models.CASCADE)

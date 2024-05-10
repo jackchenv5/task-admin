@@ -4,21 +4,22 @@
 -->
 <template>
   <div class="anticon" :class="getAppLogoClass" @click="goHome">
-    <img src="../../../assets/images/maipu.png" />
+    <img :src="imageSrcRef" />
     <div class="ml-2 truncate md:opacity-100" :class="getTitleClass" v-show="showTitle">
       {{ title }}
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-  import { computed, unref } from 'vue';
+  import { computed, unref,ref } from 'vue';
   import { useGlobSetting } from '@/hooks/setting';
   import { useGo } from '@/hooks/web/usePage';
   import { useMenuSetting } from '@/hooks/setting/useMenuSetting';
   import { useDesign } from '@/hooks/web/useDesign';
   import { PageEnum } from '@/enums/pageEnum';
   import { useUserStore } from '@/store/modules/user';
-
+  import maipuLog from '@/assets/images/maipu.png';
+  const imageSrcRef = ref(maipuLog);  
   const props = defineProps({
     /**
      * The theme of the current parent component
