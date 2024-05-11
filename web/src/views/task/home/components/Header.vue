@@ -6,8 +6,16 @@
     <div class="md:ml-6 flex flex-col justify-center md:mt-0 my-2">
       <Button size="large" danger >下发任务</Button>
     </div>
-
+    <div class="md:ml-6 flex flex-col justify-center md:mt-0 my-2">
+      <Button type="warning" size="large">新工作流</Button>
     </div>
+    <div class="flex-1 mt-4">
+      <Button type="primary" size="large">我的任务</Button>
+    </div>
+    <div class="flex-1 justify-end md:mt-0 mt-4">
+      <Button type="primary" size="large">所有任务</Button>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import { Button } from 'ant-design-vue';

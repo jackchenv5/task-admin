@@ -1,16 +1,49 @@
 <template>
   <PageWrapper>
     <template #headerContent> <Header /> </template>
-      <EditRowTable/>
-      <div class="flex flex-row" style="height:20vh">
-          <Textarea>任务内容</Textarea>
-          <Textarea>挑战目标</Textarea>
+    <div class="flex">
+      <div style="width: 20%;" class="mr-2">
+        <Card title="我的工作流">
+          <p><a>3月任务书：角色：管理员</a></p>
+          <p><a>4月任务书：角色：编排人员</a></p>
+          <p><a>5月任务书：角色：执行人员</a></p>
+        </Card>
+        <Card title="相关信息" class="mt-2">
+          <p>执行人：陈成</p>
+          <p>关联任务：</p>
+          <p><a>任务ID1：2024-05-11~2024-05-22</a></p>
+          <p><a>任务ID2：2024-05-22~2024-05-28</a></p>
+          <p>剩余总工时：8/22 天</p>
+        </Card>
+        <Card title="任务自述" class="mt-2">
+            <Textarea rows="7"></Textarea>
+        </Card>
       </div>
+      <div style="width:80%" >
+        <EditRowTable/>
+        <div class="flex mt-4  flex">
+          <div class="flex flex-row flex-grow" style="height:18vh">
+            <div class="flex flex-col w-full">
+              <h1 class="text-md">任务内容：</h1>
+              <Textarea class="flex-grow"></Textarea>
+            </div>
+          </div>
+          <div class="flex flex-row flex-grow" style="height:18vh">
+            <div class="flex flex-col w-full">
+              <h1 class="text-md">挑战目标：</h1>
+              <Textarea class="flex-grow"></Textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </PageWrapper>
 </template>
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { Button,Textarea } from 'ant-design-vue';
+  import {Textarea,Card } from 'ant-design-vue';
   import { PageWrapper } from '@/components/Page';
   import Header from './components/Header.vue';
   import EditRowTable from './components/EditRowTable.vue'

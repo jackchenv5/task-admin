@@ -24,7 +24,7 @@ const task: AppRouteModule = {
     {
       path: 'config',
       name: 'config',
-      component: () => import('@/views/task/home/index.vue'),
+      component: () => import('@/views/task/config/index.vue'),
       meta: {
         // affix: true,
         title: '配置',

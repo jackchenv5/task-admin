@@ -64,6 +64,7 @@ class AbstractTask(models.Model):
     #auto_now_add=True 创建时间，不可改变 这样不利于拷贝
     create_time = models.DateTimeField(auto_now=False,auto_now_add=False,default=timezone.now)
     
+    start_time = models.DateTimeField(auto_now=False,auto_now_add=False,default=timezone.now )
     #完成时间,用于标记
     done_time = models.DateTimeField(auto_now=False,auto_now_add=False,default=timezone.now )
     
@@ -72,6 +73,7 @@ class AbstractTask(models.Model):
 
     #任务状态
     status = models.ForeignKey(TaskStatus,on_delete=models.SET_NULL,null=True)
+    
 
     #标签
     tags = models.ManyToManyField(Tag,related_name="%(class)s")
@@ -85,7 +87,15 @@ class Granularity(models.Model):
         db_table = 'granularity'
     def __str__(self):
         return self.name
-
+        
+class Task(AbstractTask):
+    related_task = models.ForeignKey('self',on_delete=models.SET_NULL,null=True)
+    job = models.ForeignKey(Job,on_delete=models.CASCADE,related_name='tasks',null=True)
+    
+    class Meta:  
+        db_table = 'task'
+    def __str__(self):
+        return self.name
 #工作流
 class Job(models.Model):
     
@@ -117,14 +127,7 @@ class Job(models.Model):
     def __str__(self):
         return self.name
 
-class Task(AbstractTask):
-    related_task = models.ForeignKey('self',on_delete=models.SET_NULL,null=True)
-    job = models.ForeignKey(Job,on_delete=models.CASCADE,related_name='tasks',null=True)
-    
-    class Meta:  
-        db_table = 'task'
-    def __str__(self):
-        return self.name
+
 
 class Test(models.Model):
     name= models.CharField(max_length=20)

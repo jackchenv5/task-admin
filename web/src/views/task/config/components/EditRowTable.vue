@@ -30,23 +30,47 @@
         {
           title: 'ID',
           dataIndex: 'id',
-          width: 80,
+          width: 150,
         },
         {
-          title: '执行者',
-          dataIndex: 'receiver',
+          title: '属主',
+          dataIndex: 'name',
           editRow: true,
           width: 150,
         },
         {
-          title: '任务类型',
-          dataIndex: 'category',
+          title: '是否启用',
+          dataIndex: 'name',
           editRow: true,
           width: 150,
         },
         {
-      title: '开始时间',
-      dataIndex: 'start_time',
+          title: '工作流名',
+          dataIndex: 'name',
+          editRow: true,
+          width: 150,
+        },
+        {
+          title: '描述信息',
+          dataIndex: 'name7',
+          editRow: true,
+          width: 150,
+        },
+        {
+          title: '工作组',
+          dataIndex: 'name7',
+          editRow: true,
+          width: 150,
+        },
+        {
+          title: '任务排布粒度',
+          dataIndex: 'name7',
+          editRow: true,
+          width: 150,
+        },
+    {
+      title: '创建时间',
+      dataIndex: 'date',
       editRow: true,
       editComponent: 'DatePicker',
       editComponentProps: {
@@ -56,8 +80,8 @@
       width: 150,
     },
     {
-      title: '截止时间',
-      dataIndex: 'deadline_time',
+      title: '最近修改时间',
+      dataIndex: 'date',
       editRow: true,
       editComponent: 'DatePicker',
       editComponentProps: {
@@ -66,42 +90,25 @@
       },
       width: 150,
     },
-        {
-          title: '关联任务ID',
-          dataIndex: 'related_task',
-          editRow: true,
-          // 默认必填校验
-          editRule: true,
-          width: 150,
-        },
-        {
-          title: '状态',
-          dataIndex: 'status',
-          editRow: false,
-          width: 150,
-        },
   ];
 
   const { createMessage: msg } = useMessage();
   const currentEditKeyRef = ref('');
   const [registerTable] = useTable({
-    title: '6月任务书',
-    titleHelpMessage: [
-      '默认显示当前工作流下的所有任务书',
-    ],
+    // title: '可编辑行示例',
+    // titleHelpMessage: [
+    //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
+    // ],
     api: demoListApi,
     columns: columns,
     canResize: true,
-    resizeHeightOffset:230,
+    resizeHeightOffset:500,
     bordered: false,
-    inset: true,
-    size: 'small',
     showIndexColumn: false,
-    showTableSetting: true,
-    pagination:false,
+    showTableSetting: false,
     tableSetting: { fullScreen: false },
     actionColumn: {
-      width: 100,
+      width: 160,
       title: 'Action',
       dataIndex: 'action',
     },
