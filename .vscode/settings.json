@@ -1,5 +1,5 @@
 {
-  "typescript.tsdk": "./node_modules/typescript/lib",
+  "typescript.tsdk": "./web/node_modules/typescript/lib",
   "volar.tsPlugin": true,
   "volar.tsPluginStatus": false,
   "npm.packageManager": "pnpm",
@@ -64,7 +64,7 @@
     "sass"
   ],
   "path-intellisense.mappings": {
-    "@/": "${workspaceRoot}/src"
+    "@/": "${workspaceRoot}/web/src"
   },
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
