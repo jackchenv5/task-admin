@@ -99,10 +99,11 @@ class Task(AbstractTask):
 #工作流
 class Job(models.Model):
     
+    #创建人
+    creater = models.ForeignKey(User,on_delete=models.CASCADE)
+
     #项目名
     name = models.CharField(max_length=512,unique=True)
-    #job_name
-    #project_name =
 
     #工作组
     group = models.ForeignKey(Group,related_name="jobs",on_delete=models.CASCADE)

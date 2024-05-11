@@ -19,10 +19,7 @@
     ActionItem,
     EditRecordRow,
   } from '@/components/Table';
-  import { optionsListApi } from '@/api/demo/select';
-
-  import { demoListApi } from '@/api/demo/table';
-  import { treeOptionsListApi } from '@/api/demo/tree';
+  import { demoJobApi } from '@/api/demo/table';
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
 
@@ -34,13 +31,13 @@
         },
         {
           title: '属主',
-          dataIndex: 'name',
+          dataIndex: 'creater',
           editRow: true,
           width: 150,
         },
         {
-          title: '是否启用',
-          dataIndex: 'name',
+          title: '激活',
+          dataIndex: 'status',
           editRow: true,
           width: 150,
         },
@@ -51,45 +48,34 @@
           width: 150,
         },
         {
-          title: '描述信息',
-          dataIndex: 'name7',
+          title: '任务粒度',
+          dataIndex: 'granularity',
           editRow: true,
           width: 150,
         },
         {
           title: '工作组',
-          dataIndex: 'name7',
+          dataIndex: 'group',
           editRow: true,
           width: 150,
         },
         {
-          title: '任务排布粒度',
-          dataIndex: 'name7',
+          title: '最近修改时间',
+          dataIndex: 'modifydate',
+          editRow: true,
+          editComponent: 'DatePicker',
+          editComponentProps: {
+            valueFormat: 'YYYY-MM-DD',
+            format: 'YYYY-MM-DD',
+          },
+          width: 150,
+        },
+        {
+          title: '描述信息',
+          dataIndex: 'description',
           editRow: true,
           width: 150,
         },
-    {
-      title: '创建时间',
-      dataIndex: 'date',
-      editRow: true,
-      editComponent: 'DatePicker',
-      editComponentProps: {
-        valueFormat: 'YYYY-MM-DD',
-        format: 'YYYY-MM-DD',
-      },
-      width: 150,
-    },
-    {
-      title: '最近修改时间',
-      dataIndex: 'date',
-      editRow: true,
-      editComponent: 'DatePicker',
-      editComponentProps: {
-        valueFormat: 'YYYY-MM-DD',
-        format: 'YYYY-MM-DD',
-      },
-      width: 150,
-    },
   ];
 
   const { createMessage: msg } = useMessage();
@@ -99,7 +85,7 @@
     // titleHelpMessage: [
     //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
     // ],
-    api: demoListApi,
+    api: demoJobApi,
     columns: columns,
     canResize: true,
     resizeHeightOffset:500,
