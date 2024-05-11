@@ -23,7 +23,7 @@ const jobList = (() => {
     result.push({
       id: `${index}`,
       creater: '@cname()',
-      name: '@string',
+      'name|1': ['测试1组任务书','测试2组任务书','测试3组任务书'],
       'granularity|1': ['周', '双周', '月', '天'],
       'group|1': ['陈成，乔志，张涛', '王俊坤，陈成，乔志', '王俊坤，陈成','乔志，张涛'],
       'status|1': ['未激活', '激活'],
