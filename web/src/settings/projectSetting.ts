@@ -86,7 +86,7 @@ const setting: ProjectConfig = {
     //  Whether to fix the left menu
     fixed: true,
     // Menu collapse
-    collapsed: false,
+    collapsed: true,
     // When sider hide because of the responsive layout
     siderHidden: false,
     // Whether to display the menu name when folding the menu

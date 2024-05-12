@@ -6,7 +6,6 @@
 </template>
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import {Textarea } from 'ant-design-vue';
   import { PageWrapper } from '@/components/Page';
   import Header from './components/Header.vue';
   import EditRowTable from './components/EditRowTable.vue'

@@ -30,13 +30,19 @@
           width: 150,
         },
         {
+          title: '名称',
+          dataIndex: 'name',
+          editRow: true,
+          width: 150,
+        },
+        {
           title: '属主',
           dataIndex: 'creater',
           editRow: true,
           width: 150,
         },
         {
-          title: '激活',
+          title: '是否激活',
           dataIndex: 'status',
           editRow: true,
           width: 150,
@@ -88,10 +94,10 @@
     api: demoJobApi,
     columns: columns,
     canResize: true,
-    resizeHeightOffset:500,
+    // resizeHeightOffset:500,
     bordered: false,
     showIndexColumn: false,
-    showTableSetting: false,
+    showTableSetting: true,
     tableSetting: { fullScreen: false },
     actionColumn: {
       width: 160,
