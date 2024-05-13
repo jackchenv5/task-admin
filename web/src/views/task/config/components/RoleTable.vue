@@ -19,7 +19,8 @@
     ActionItem,
     EditRecordRow,
   } from '@/components/Table';
-  import { jobListApi } from '@/api/task/table';
+  // import { roleListApi } from '@/api/task/table';
+  import { roleListApi } from '@/api/demo/table';
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
 
@@ -44,7 +45,7 @@
     // titleHelpMessage: [
     //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
     // ],
-    api: jobListApi,
+    api: roleListApi,
     columns: columns,
     canResize: true,
     // resizeHeightOffset:500,
