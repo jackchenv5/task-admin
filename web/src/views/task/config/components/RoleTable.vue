@@ -39,7 +39,7 @@
 
   const { createMessage: msg } = useMessage();
   const currentEditKeyRef = ref('');
-  const [registerTable] = useTable({
+  const [registerTable,methods] = useTable({
     // title: '可编辑行示例',
     // titleHelpMessage: [
     //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
@@ -95,25 +95,18 @@
   async function handleDelete(record: EditRecordRow) {
     // 校验
     msg.loading({ content: '正在删除...', duration: 0, key: 'delete' });
-    const valid = await record.onValid?.();
-    if (valid) {
       try {
         // const data = cloneDeep(record.editValueRefs);
         console.log(record);
         //TODO 此处将数据提交给服务器保存
         // ...
-        // 保存之后提交编辑状态
-        const pass = await record.onEdit?.(false, true);
-        if (pass) {
-          currentEditKeyRef.value = '';
-        }
+        // 刷新
+        methods.reload()
+        currentEditKeyRef.value = '';
         msg.success({ content: '数据删除', key: 'delete' });
       } catch (error) {
         msg.error({ content: '删除失败', key: 'delete' });
       }
-    } else {
-      msg.error({ content: '请填写正确的数据', key: 'saving' });
-    }
   }
 
   function createActions(record: EditRecordRow): ActionItem[] {
