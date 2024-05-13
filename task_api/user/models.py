@@ -16,7 +16,7 @@ class Role(models.Model):
     class Meta:  
         db_table = 'role'
     def __str__(self):
-        return self.username
+        return self.name
 
 # UserGroupRole 模型（用户-组-角色的中间模型）  
 class UserGroupRole(models.Model):  

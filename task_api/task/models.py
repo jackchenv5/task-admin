@@ -88,14 +88,6 @@ class Granularity(models.Model):
     def __str__(self):
         return self.name
         
-class Task(AbstractTask):
-    related_task = models.ForeignKey('self',on_delete=models.SET_NULL,null=True)
-    job = models.ForeignKey(Job,on_delete=models.CASCADE,related_name='tasks',null=True)
-    
-    class Meta:  
-        db_table = 'task'
-    def __str__(self):
-        return self.name
 #工作流
 class Job(models.Model):
     
@@ -128,7 +120,14 @@ class Job(models.Model):
     def __str__(self):
         return self.name
 
-
+class Task(AbstractTask):
+    related_task = models.ForeignKey('self',on_delete=models.SET_NULL,null=True)
+    job = models.ForeignKey(Job,on_delete=models.CASCADE,related_name='tasks',null=True)
+    
+    class Meta:  
+        db_table = 'task'
+    def __str__(self):
+        return self.name
 
 class Test(models.Model):
     name= models.CharField(max_length=20)

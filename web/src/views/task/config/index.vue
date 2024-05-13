@@ -5,20 +5,20 @@
       <div class="w-full">
         <Card>
         <RadioGroup v-model:value="value1" size="large" button-style="solid" >
-          <RadioButton value="1" size="large">工作流</RadioButton>
+          <!-- <RadioButton value="1" size="large">工作流</RadioButton> -->
           <RadioButton value="2" size="large">组</RadioButton>
           <RadioButton value="3" size="large">用户</RadioButton>
           <RadioButton value="4" size="large">角色</RadioButton>
         </RadioGroup>
-        <Button>新建</Button>
+        <Button class="ml-8" type="primary">新建</Button>
       </Card>
       </div>
 
     </div>
     
-    <template  v-if="value1 === '1' ">
+    <!-- <template  v-if="value1 === '1' ">
       <JobTable/>
-    </template>
+    </template> -->
 
     <template  v-if="value1 === '2' ">
       <GroupTable/>
@@ -43,7 +43,7 @@
   import RoleTable from './components/RoleTable.vue'
 
   import {RadioGroup,RadioButton,Card,Button } from 'ant-design-vue';
-  const value1 = ref<string>('1');
+  const value1 = ref<string>('4');
   const loading = ref(true);
 
   setTimeout(() => {
