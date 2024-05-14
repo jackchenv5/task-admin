@@ -20,15 +20,22 @@ export const jobListApi = (params) =>
       ignoreCancelToken: true,
     },
   });
-  export const roleListApi = (params) =>
-    api.get({
-      url: Api.ROLE_LIST,
-      // params,
-      headers: {
-        // @ts-ignore
-        ignoreCancelToken: true,
-      },
-    });
+
+export const roleListApi = (params) =>
+  api.get({
+    url: Api.ROLE_LIST,
+    // params,
+    headers: {
+      // @ts-ignore
+      ignoreCancelToken: true,
+    },
+  });
+
+export const roleDeleteApi =  (pk) =>
+  api.delete({
+    url: `${Api.ROLE_LIST}/${pk}`
+  });
+
 
     export const groupListApi = (params) =>
       api.get({

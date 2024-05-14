@@ -19,8 +19,8 @@
     ActionItem,
     EditRecordRow,
   } from '@/components/Table';
-  // import { roleListApi } from '@/api/task/table';
-  import { roleListApi } from '@/api/demo/table';
+  import { roleListApi,roleDeleteApi } from '@/api/task/table';
+  // import { roleListApi } from '@/api/demo/table';
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
 
@@ -95,19 +95,21 @@
   }
   async function handleDelete(record: EditRecordRow) {
     // 校验
-    msg.loading({ content: '正在删除...', duration: 0, key: 'delete' });
-      try {
-        // const data = cloneDeep(record.editValueRefs);
-        console.log(record);
-        //TODO 此处将数据提交给服务器保存
-        // ...
+      // msg.loading({ content: '正在删除...', duration: 0, key: 'delete' });
+      //TODO 此处将数据提交给服务器保存
+      // methods.reload()
+      try{
+        await roleDeleteApi(record.id);
+        msg.success({ content: `${record.name}删除成功！`, key: 'delete' });
+      } catch (e){
+        msg.success({ content: `${record.name}删除失败！`, key: 'delete' });
+      }finally{
+        currentEditKeyRef.value = '';
         // 刷新
         methods.reload()
-        currentEditKeyRef.value = '';
-        msg.success({ content: '数据删除', key: 'delete' });
-      } catch (error) {
-        msg.error({ content: '删除失败', key: 'delete' });
       }
+        
+
   }
 
   function createActions(record: EditRecordRow): ActionItem[] {
