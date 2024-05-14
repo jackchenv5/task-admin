@@ -36,7 +36,7 @@
   import { ref } from 'vue';
   import { PageWrapper } from '@/components/Page';
   // import Header from './components/Header.vue';
-  import JobTable from './components/JobTable.vue'
+  // import JobTable from './components/JobTable.vue'
   import UserTable from './components/UserTable.vue'
   import GroupTable from './components/GroupTable.vue'
   import RoleTable from './components/RoleTable.vue'

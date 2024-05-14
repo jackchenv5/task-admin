@@ -23,6 +23,7 @@
     EditRecordRow,
   } from '@/components/Table';
   import { userListApi,userDeleteApi,userModifyApi,userAddApi } from '@/api/task/user';
+  import { roleListApi} from '@/api/task/role';
   // import { userListApi } from '@/api/demo/table';
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
@@ -45,9 +46,16 @@
         },
         {
           title: '角色',
-          dataIndex: 'role',
+          dataIndex: 'role_name',
           editRow: true,
           width: 160,
+          editComponent: 'ApiSelect',
+          editComponentProps: {
+            api: roleListApi,
+            resultField: 'items',
+            labelField: 'name',
+            valueField: 'id',
+          },
         },
   ];
 
@@ -89,10 +97,11 @@
     const valid = await record.onValid?.();
     if (valid) {
       try {
-        console.log('record')
+        console.log('record',record)
         const data = cloneDeep(record.editValueRefs);
-        console.log('data==>',data);
         data['username'] = record.username
+        data['role'] = data?.role_name
+        console.log(data)
         userModifyApi(record.id,data)
         //TODO 此处将数据提交给服务器保存
         // ...

@@ -4,23 +4,31 @@ User = get_user_model()
 from user.models import Role,Group
 
 class UserSerializer(serializers.ModelSerializer):
-    role = serializers.PrimaryKeyRelatedField(  
-    queryset=Role.objects.all(),  
-    required=False,  
-    allow_null=True  
-    )  
+    role_name = serializers.SerializerMethodField() 
+    
+    # role_id = serializers.PrimaryKeyRelatedField(  
+    # queryset=Role.objects.all(),  
+    # required=False,  
+    # allow_null=True  
+    # )  
     class Meta:
         model = User
-        fields = ['id','username','emp_num','role']
-    def update(self, instance, validated_data):  
-        # 实现自定义的更新逻辑  
-        if 'role' in validated_data:  
-            role = validated_data.pop('role')  
-            instance.role = role  
-        for attr, value in validated_data.items():  
-            setattr(instance, attr, value)  
-        instance.save()  
-        return instance
+        fields = ['id','username','emp_num','role','role_name']
+    def get_role_name(self, obj):  
+        if obj.role is not None:  
+            return obj.role.name  
+        return '未指定'  # 或者你想要的任何默认值
+    
+    # def update(self, instance, validated_data):  
+    #     # 实现自定义的更新逻辑  
+    #     print(validated_data)
+    #     if 'role' in validated_data:  
+    #         role = validated_data.pop('role')  
+    #         instance.role = role  
+    #     for attr, value in validated_data.items():  
+    #         setattr(instance, attr, value)  
+    #     instance.save()  
+    #     return instance
 
 class UserIDListSerializer(serializers.Serializer):  
     ids = serializers.ListField(child=serializers.IntegerField(), required=True)
