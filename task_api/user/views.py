@@ -70,7 +70,7 @@ class GroupViewSet(viewsets.ModelViewSet):
   
         page = self.paginate_queryset(queryset)  
         if page is not None:  
-            serializer = self.get_serializer(page, many=True)  
+            serializer = self.get_serializer(page, many=True)
             return Response({  
                 'code': 0,  
                 'message': 'ok',  

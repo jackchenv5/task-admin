@@ -35,6 +35,11 @@
           editRow: true,
           width: 150,
         },
+        {
+          title: '成员列表',
+          dataIndex: 'users',
+          editRow: true,
+        },
   ];
 
   const { createMessage: msg } = useMessage();
