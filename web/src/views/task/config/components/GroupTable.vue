@@ -1,6 +1,9 @@
 <template>
   <div class="p-0">
     <BasicTable @register="registerTable" @edit-change="onEditChange">
+      <template #toolbar>
+        <a-button type="primary" @click="handleCreate"> 新增组 </a-button>
+      </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction :actions="createActions(record)" />
@@ -19,7 +22,8 @@
     ActionItem,
     EditRecordRow,
   } from '@/components/Table';
-  import { groupListApi } from '@/api/task/group';
+  import { groupListApi,groupAddApi,groupModifyApi } from '@/api/task/group';
+  import {userIDApi} from '@/api/task/user'
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
 
@@ -44,7 +48,7 @@
 
   const { createMessage: msg } = useMessage();
   const currentEditKeyRef = ref('');
-  const [registerTable] = useTable({
+  const [registerTable, methods] = useTable({
     // title: '可编辑行示例',
     // titleHelpMessage: [
     //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
@@ -81,7 +85,11 @@
     if (valid) {
       try {
         const data = cloneDeep(record.editValueRefs);
-        console.log(data);
+        console.log(data?.users);
+        const ids = await userIDApi(data?.users)
+        // @ts-ignore
+        data['user_list'] = ids
+        groupModifyApi(record.id,data)
         //TODO 此处将数据提交给服务器保存
         // ...
         // 保存之后提交编辑状态
@@ -129,5 +137,14 @@
       record.editValueRefs.name4.value = `${value}`;
     }
     console.log(column, value, record);
+  }
+  async function handleCreate(){
+    await groupAddApi()
+    // 刷新
+    await methods.reload()
+    const data = methods.getDataSource()
+    const curRow = data[data.length-1]
+    currentEditKeyRef.value = curRow.key
+    curRow.onEdit?.(true);
   }
 </script>

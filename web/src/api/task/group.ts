@@ -27,5 +27,5 @@ export const groupModifyApi =  (pk,data) =>
 export const groupAddApi =  () =>
     api.post({
       url: `${Api.GROUP_LIST}/`,
-      params:{name:'请输入新角色名'}
+      params:{name:'请输入新组名'}
     });

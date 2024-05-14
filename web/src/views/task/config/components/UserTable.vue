@@ -1,6 +1,9 @@
 <template>
   <div class="p-0">
     <BasicTable @register="registerTable" @edit-change="onEditChange">
+      <template #toolbar>
+        <a-button type="primary" @click="handleCreate"> 新增用户 </a-button>
+      </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction :actions="createActions(record)" />
@@ -19,7 +22,8 @@
     ActionItem,
     EditRecordRow,
   } from '@/components/Table';
-  import { userListApi } from '@/api/task/role';
+  import { userListApi,userDeleteApi,userModifyApi,userAddApi } from '@/api/task/user';
+  // import { userListApi } from '@/api/demo/table';
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
 
@@ -30,63 +34,26 @@
           width: 150,
         },
         {
-          title: '名称',
-          dataIndex: 'name',
-          editRow: true,
+          title: '用户名',
+          dataIndex: 'username',
           width: 150,
         },
         {
-          title: '属主',
-          dataIndex: 'creater',
-          editRow: true,
+          title: '工号',
+          dataIndex: 'emp_num',
           width: 150,
         },
         {
-          title: '是否激活',
-          dataIndex: 'status',
+          title: '角色',
+          dataIndex: 'role',
           editRow: true,
-          width: 150,
-        },
-        {
-          title: '工作流名',
-          dataIndex: 'name',
-          editRow: true,
-          width: 150,
-        },
-        {
-          title: '任务粒度',
-          dataIndex: 'granularity',
-          editRow: true,
-          width: 150,
-        },
-        {
-          title: '工作组',
-          dataIndex: 'group',
-          editRow: true,
-          width: 150,
-        },
-        {
-          title: '最近修改时间',
-          dataIndex: 'modifydate',
-          editRow: true,
-          editComponent: 'DatePicker',
-          editComponentProps: {
-            valueFormat: 'YYYY-MM-DD',
-            format: 'YYYY-MM-DD',
-          },
-          width: 150,
-        },
-        {
-          title: '描述信息',
-          dataIndex: 'description',
-          editRow: true,
-          width: 150,
+          width: 160,
         },
   ];
 
   const { createMessage: msg } = useMessage();
   const currentEditKeyRef = ref('');
-  const [registerTable] = useTable({
+  const [registerTable,methods] = useTable({
     // title: '可编辑行示例',
     // titleHelpMessage: [
     //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
@@ -122,8 +89,11 @@
     const valid = await record.onValid?.();
     if (valid) {
       try {
+        console.log('record')
         const data = cloneDeep(record.editValueRefs);
-        console.log(data);
+        console.log('data==>',data);
+        data['username'] = record.username
+        userModifyApi(record.id,data)
         //TODO 此处将数据提交给服务器保存
         // ...
         // 保存之后提交编辑状态
@@ -139,6 +109,24 @@
       msg.error({ content: '请填写正确的数据', key: 'saving' });
     }
   }
+  async function handleDelete(record: EditRecordRow) {
+    // 校验
+      // msg.loading({ content: '正在删除...', duration: 0, key: 'delete' });
+      //TODO 此处将数据提交给服务器保存
+      // methods.reload()
+      try{
+        await userDeleteApi(record.id);
+        msg.success({ content: `${record.name}删除成功！`, key: 'delete' });
+      } catch (e){
+        msg.success({ content: `${record.name}删除失败！`, key: 'delete' });
+      }finally{
+        currentEditKeyRef.value = '';
+        // 刷新
+        methods.reload()
+      }
+        
+
+  }
 
   function createActions(record: EditRecordRow): ActionItem[] {
     if (!record.editable) {
@@ -147,6 +135,11 @@
           label: '编辑',
           disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
           onClick: handleEdit.bind(null, record),
+        },
+        {
+          label: '删除',
+          disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
+          onClick: handleDelete.bind(null, record),
         },
       ];
     }
@@ -171,5 +164,15 @@
       record.editValueRefs.name4.value = `${value}`;
     }
     console.log(column, value, record);
+  }
+
+  async function handleCreate(){
+    await userAddApi()
+    // 刷新
+    await methods.reload()
+    const data = methods.getDataSource()
+    const curRow = data[data.length-1]
+    currentEditKeyRef.value = curRow.key
+    curRow.onEdit?.(true);
   }
 </script>

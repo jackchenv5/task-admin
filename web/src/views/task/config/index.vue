@@ -23,9 +23,9 @@
       <GroupTable/>
     </template>
 
-    <!-- <template  v-if="value1 === '3' ">
+    <template  v-if="value1 === '3' ">
       <UserTable/>
-    </template> -->
+    </template>
 
     <template  v-if="value1 === '4' ">
       <RoleTable/>
@@ -37,7 +37,7 @@
   import { PageWrapper } from '@/components/Page';
   // import Header from './components/Header.vue';
   import JobTable from './components/JobTable.vue'
-  // import UserTable from './components/UserTable.vue'
+  import UserTable from './components/UserTable.vue'
   import GroupTable from './components/GroupTable.vue'
   import RoleTable from './components/RoleTable.vue'
 
