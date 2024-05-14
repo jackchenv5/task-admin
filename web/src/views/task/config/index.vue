@@ -10,7 +10,6 @@
           <RadioButton value="3" size="large">用户</RadioButton>
           <RadioButton value="4" size="large">角色</RadioButton>
         </RadioGroup>
-        <Button class="ml-8" type="primary">新建</Button>
       </Card>
       </div>
 
@@ -24,9 +23,9 @@
       <GroupTable/>
     </template>
 
-    <template  v-if="value1 === '3' ">
+    <!-- <template  v-if="value1 === '3' ">
       <UserTable/>
-    </template>
+    </template> -->
 
     <template  v-if="value1 === '4' ">
       <RoleTable/>
@@ -38,12 +37,12 @@
   import { PageWrapper } from '@/components/Page';
   // import Header from './components/Header.vue';
   import JobTable from './components/JobTable.vue'
-  import UserTable from './components/UserTable.vue'
+  // import UserTable from './components/UserTable.vue'
   import GroupTable from './components/GroupTable.vue'
   import RoleTable from './components/RoleTable.vue'
 
-  import {RadioGroup,RadioButton,Card,Button } from 'ant-design-vue';
-  const value1 = ref<string>('4');
+  import {RadioGroup,RadioButton,Card } from 'ant-design-vue';
+  const value1 = ref<string>('2');
   const loading = ref(true);
 
   setTimeout(() => {

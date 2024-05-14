@@ -1,6 +1,9 @@
 <template>
   <div class="p-0">
     <BasicTable @register="registerTable" @edit-change="onEditChange">
+      <template #toolbar>
+        <a-button type="primary" @click="handleCreate"> 新增角色 </a-button>
+      </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction :actions="createActions(record)" />
@@ -19,7 +22,7 @@
     ActionItem,
     EditRecordRow,
   } from '@/components/Table';
-  import { roleListApi,roleDeleteApi } from '@/api/task/table';
+  import { roleListApi,roleDeleteApi,roleModifyApi,roleAddApi } from '@/api/task/role';
   // import { roleListApi } from '@/api/demo/table';
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
@@ -76,8 +79,10 @@
     const valid = await record.onValid?.();
     if (valid) {
       try {
+        console.log('record')
         const data = cloneDeep(record.editValueRefs);
-        console.log(data);
+        console.log('data==>',data);
+        roleModifyApi(record.id,data)
         //TODO 此处将数据提交给服务器保存
         // ...
         // 保存之后提交编辑状态
@@ -148,5 +153,15 @@
       record.editValueRefs.name4.value = `${value}`;
     }
     console.log(column, value, record);
+  }
+
+  async function handleCreate(){
+    await roleAddApi()
+    // 刷新
+    await methods.reload()
+    const data = methods.getDataSource()
+    const curRow = data[data.length-1]
+    currentEditKeyRef.value = curRow.key
+    curRow.onEdit?.(true);
   }
 </script>

@@ -19,7 +19,7 @@
     ActionItem,
     EditRecordRow,
   } from '@/components/Table';
-  import { groupListApi } from '@/api/task/table';
+  import { groupListApi } from '@/api/task/group';
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
 
@@ -32,53 +32,6 @@
         {
           title: '名称',
           dataIndex: 'name',
-          editRow: true,
-          width: 150,
-        },
-        {
-          title: '属主',
-          dataIndex: 'creater',
-          editRow: true,
-          width: 150,
-        },
-        {
-          title: '是否激活',
-          dataIndex: 'status',
-          editRow: true,
-          width: 150,
-        },
-        {
-          title: '工作流名',
-          dataIndex: 'name',
-          editRow: true,
-          width: 150,
-        },
-        {
-          title: '任务粒度',
-          dataIndex: 'granularity',
-          editRow: true,
-          width: 150,
-        },
-        {
-          title: '工作组',
-          dataIndex: 'group',
-          editRow: true,
-          width: 150,
-        },
-        {
-          title: '最近修改时间',
-          dataIndex: 'modifydate',
-          editRow: true,
-          editComponent: 'DatePicker',
-          editComponentProps: {
-            valueFormat: 'YYYY-MM-DD',
-            format: 'YYYY-MM-DD',
-          },
-          width: 150,
-        },
-        {
-          title: '描述信息',
-          dataIndex: 'description',
           editRow: true,
           width: 150,
         },
