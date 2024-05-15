@@ -1,6 +1,9 @@
 <template>
   <div class="p-0">
     <BasicTable @register="registerTable" @edit-change="onEditChange">
+      <template #toolbar>
+        <a-button type="primary" @click="handleCreate"> 新增工作流 </a-button>
+      </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction :actions="createActions(record)" />
@@ -19,15 +22,17 @@
     ActionItem,
     EditRecordRow,
   } from '@/components/Table';
-  import { jobListApi } from '@/api/task/role';
+  import { granularityListApi, jobAddApi, jobDeleteApi, jobListApi, jobModifyApi, jobStatusListApi } from '@/api/task/job';
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
+import { userListApi } from '@/api/task/user';
+import { groupListApi } from '@/api/task/group';
 
   const columns: BasicColumn[] = [
         {
           title: 'ID',
           dataIndex: 'id',
-          width: 150,
+          width: 80,
         },
         {
           title: '名称',
@@ -37,45 +42,67 @@
         },
         {
           title: '属主',
-          dataIndex: 'creater',
+          dataIndex: 'creater_name',
           editRow: true,
           width: 150,
+          editComponent: 'ApiSelect',
+          editComponentProps: {
+            api: userListApi,
+            resultField: 'items',
+            labelField: 'username',
+            valueField: 'id',
+          },
         },
         {
           title: '是否激活',
-          dataIndex: 'status',
+          dataIndex: 'status_name',
           editRow: true,
           width: 150,
-        },
-        {
-          title: '工作流名',
-          dataIndex: 'name',
-          editRow: true,
-          width: 150,
+          editComponent: 'ApiSelect',
+          editComponentProps: {
+            api: jobStatusListApi,
+            resultField: 'items',
+            labelField: 'name',
+            valueField: 'id',
+          },
         },
         {
           title: '任务粒度',
-          dataIndex: 'granularity',
+          dataIndex: 'granularity_name',
           editRow: true,
           width: 150,
+          editComponent: 'ApiSelect',
+          editComponentProps: {
+            api: granularityListApi,
+            resultField: 'items',
+            labelField: 'name',
+            valueField: 'id',
+          },
         },
         {
           title: '工作组',
-          dataIndex: 'group',
+          dataIndex: 'group_name',
           editRow: true,
           width: 150,
-        },
-        {
-          title: '最近修改时间',
-          dataIndex: 'modifydate',
-          editRow: true,
-          editComponent: 'DatePicker',
+          editComponent: 'ApiSelect',
           editComponentProps: {
-            valueFormat: 'YYYY-MM-DD',
-            format: 'YYYY-MM-DD',
+            api: groupListApi,
+            resultField: 'items',
+            labelField: 'name',
+            valueField: 'id',
           },
-          width: 150,
         },
+        // {
+        //   title: '最近修改时间',
+        //   dataIndex: 'modifydate',
+        //   editRow: true,
+        //   editComponent: 'DatePicker',
+        //   editComponentProps: {
+        //     valueFormat: 'YYYY-MM-DD',
+        //     format: 'YYYY-MM-DD',
+        //   },
+        //   width: 150,
+        // },
         {
           title: '描述信息',
           dataIndex: 'description',
@@ -86,7 +113,7 @@
 
   const { createMessage: msg } = useMessage();
   const currentEditKeyRef = ref('');
-  const [registerTable] = useTable({
+  const [registerTable,methods] = useTable({
     // title: '可编辑行示例',
     // titleHelpMessage: [
     //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
@@ -123,8 +150,13 @@
     if (valid) {
       try {
         const data = cloneDeep(record.editValueRefs);
+        data['creater'] = record.creater_name
+        data['status'] = record.status_name
+        data['granularity'] = record.granularity_name
+        data['group'] = record.group_name
         console.log(data);
         //TODO 此处将数据提交给服务器保存
+        jobModifyApi(record.id,data)
         // ...
         // 保存之后提交编辑状态
         const pass = await record.onEdit?.(false, true);
@@ -139,7 +171,24 @@
       msg.error({ content: '请填写正确的数据', key: 'saving' });
     }
   }
+  async function handleDelete(record: EditRecordRow) {
+    // 校验
+      // msg.loading({ content: '正在删除...', duration: 0, key: 'delete' });
+      //TODO 此处将数据提交给服务器保存
+      // methods.reload()
+      try{
+        await jobDeleteApi(record.id);
+        msg.success({ content: `${record.name}删除成功！`, key: 'delete' });
+      } catch (e){
+        msg.success({ content: `${record.name}删除失败！`, key: 'delete' });
+      }finally{
+        currentEditKeyRef.value = '';
+        // 刷新
+        methods.reload()
+      }
+        
 
+  }
   function createActions(record: EditRecordRow): ActionItem[] {
     if (!record.editable) {
       return [
@@ -147,6 +196,11 @@
           label: '编辑',
           disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
           onClick: handleEdit.bind(null, record),
+        },
+        {
+          label: '删除',
+          disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
+          onClick: handleDelete.bind(null, record),
         },
       ];
     }
@@ -171,5 +225,15 @@
       record.editValueRefs.name4.value = `${value}`;
     }
     console.log(column, value, record);
+  }
+
+  async function handleCreate(){
+    await jobAddApi()
+    // 刷新
+    await methods.reload()
+    const data = methods.getDataSource()
+    const curRow = data[data.length-1]
+    currentEditKeyRef.value = curRow.key
+    curRow.onEdit?.(true);
   }
 </script>

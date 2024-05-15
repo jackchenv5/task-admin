@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone  
-from django.contrib.auth.models import Group
+from user.models import Group
 
 User = get_user_model()
 
@@ -62,11 +62,11 @@ class AbstractTask(models.Model):
     #创建时间
     #auto_now=False 每次保存的时候，更新时间
     #auto_now_add=True 创建时间，不可改变 这样不利于拷贝
-    create_time = models.DateTimeField(auto_now=False,auto_now_add=False,default=timezone.now)
+    create_time = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,default=timezone.now)
     
-    start_time = models.DateTimeField(auto_now=False,auto_now_add=False,default=timezone.now )
+    start_time = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,default=timezone.now )
     #完成时间,用于标记
-    done_time = models.DateTimeField(auto_now=False,auto_now_add=False,default=timezone.now )
+    done_time = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,default=timezone.now )
     
     #截至时间
     deadline_time = models.DateTimeField(auto_now=False,auto_now_add=False,default=timezone.now )
@@ -76,7 +76,7 @@ class AbstractTask(models.Model):
     
 
     #标签
-    tags = models.ManyToManyField(Tag,related_name="%(class)s")
+    tags = models.ManyToManyField(Tag,related_name="%(class)s",null=True)
     
     class Meta:  
         abstract = True  # 设置为抽象基类 
@@ -95,7 +95,7 @@ class Job(models.Model):
     creater = models.ForeignKey(User,on_delete=models.CASCADE)
 
     #项目名
-    name = models.CharField(max_length=512,unique=True)
+    name = models.CharField(max_length=512,unique=True,null=True)
 
     #工作组
     group = models.ForeignKey(Group,related_name="jobs",on_delete=models.CASCADE)
@@ -104,10 +104,10 @@ class Job(models.Model):
     status = models.ForeignKey(JobStatus,on_delete=models.SET_NULL,null=True)
     
     #创建时间
-    create_time = models.DateTimeField(auto_now=False,auto_now_add=True)
+    create_time = models.DateTimeField(auto_now=False,auto_now_add=True,null=True)
     
     #完成时间,用于标记
-    done_time = models.DateTimeField(auto_now=False,auto_now_add=False,default=timezone.now )
+    done_time = models.DateTimeField(auto_now=False,auto_now_add=False,default=timezone.now,null=True)
     
     #描述信息
     description = models.CharField(max_length=512,null=True)

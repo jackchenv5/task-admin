@@ -27,22 +27,42 @@ class GranularitySerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class TaskSerializer(serializers.ModelSerializer):
-    create_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
-    done_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
-    deadline_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+    create_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True)
+    done_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True)
+    deadline_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True)
     class Meta:
         model = Task
         fields = ['id','category','content','challenge','creater','receiver','create_time','done_time','deadline_time','status','tags']
 
 class JobSerializer(serializers.ModelSerializer):
-    # group = serializers.StringRelatedField() 
-    # status = serializers.StringRelatedField() 
-    # granularity = serializers.StringRelatedField() 
-    create_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
-    done_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+    creater_name = serializers.SerializerMethodField()
+    group_name = serializers.SerializerMethodField() 
+    status_name = serializers.SerializerMethodField() 
+    granularity_name = serializers.SerializerMethodField() 
+    create_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',required=False)
+    done_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',required=False)
     class Meta:
         model = Job
-        fields = ['id', 'name','group','status','create_time','done_time','description','granularity']
+        fields = ['id', 'name','creater','group','status','create_time','done_time','description','granularity','creater_name','group_name','status_name','granularity_name']
+    def get_creater_name(self, obj):  
+        if obj.creater is not None:  
+            return obj.creater.username  
+        return '未指定'  # 或者你想要的任何默认值
+    
+    def get_group_name(self, obj):  
+        if obj.creater is not None:  
+            return obj.group.name
+        return '未指定'  # 或者你想要的任何默认值
+
+    def get_status_name(self, obj):  
+        if obj.status is not None:  
+            return obj.status.name
+        return '未指定'  # 或者你想要的任何默认值
+    
+    def get_granularity_name(self, obj):  
+        if obj.granularity is not None:  
+            return obj.granularity.name
+        return '未指定'  # 或者你想要的任何默认值
 
 class TestSerializer(serializers.ModelSerializer):
     start_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
