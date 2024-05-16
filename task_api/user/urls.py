@@ -12,5 +12,5 @@ router.register(r'groups', GroupViewSet, basename='group')
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     path('', include(router.urls)),
-    path('users/ids/by_usernames/<str:usernames>/', UserIDsByUsernamesAPIView.as_view(), name='user-ids-by-usernames'),  
+    path('users/ids/by_usernames/<str:usernames>/', UserIDsByUsernamesAPIView.as_view(), name='user-ids-by-usernames'), 
 ]

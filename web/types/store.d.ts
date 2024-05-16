@@ -38,8 +38,9 @@ export interface ErrorLogInfo {
 export interface UserInfo {
   userId: string | number;
   username: string;
-  realName: string;
-  avatar: string;
+  empnum:string;
+  realName?: string;
+  avatar?: string;
   desc?: string;
   homePath?: string;
   roles: RoleInfo[];

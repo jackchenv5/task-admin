@@ -1,10 +1,11 @@
 from rest_framework import generics
+from django.contrib.auth.models import User  
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from rest_framework import viewsets
 
-from task.models import TaskStatus,JobStatus,TaskCategory,Tag,Granularity,Task,Job,Test
-from task.serializers import TaskStatusSerializer,JobStatusSerializer,TaskCategorySerializer,TagSerializer,GranularitySerializer,TaskSerializer,JobSerializer,TestSerializer
+from task.models import TaskStatus,JobStatus,TaskCategory,Tag,Granularity,Task,Job
+from task.serializers import TaskStatusSerializer,JobStatusSerializer,TaskCategorySerializer,TagSerializer,GranularitySerializer,TaskSerializer,JobSerializer
 
 from rest_framework.pagination import PageNumberPagination  
 from rest_framework.response import Response 
@@ -92,9 +93,27 @@ class JobViewSet(viewsets.ModelViewSet):
             'type': 'success',  
         })
 
-class TestViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list` and `retrieve` actions.hello
-    """
-    queryset = Test.objects.all()
-    serializer_class = TestSerializer
+  
+class UserJobsListView(generics.ListAPIView):  
+    serializer_class = JobSerializer  
+  
+    def get_queryset(self):  
+        # 获取请求中的用户名  
+        userid = self.kwargs.get('userid')  
+        try:  
+            user = User.objects.get(id=userid)  
+        except User.DoesNotExist:  
+            return Job.objects.none()  # 返回一个空的Job查询集  
+  
+        # 获取用户创建的Job  
+        jobs_by_user = Job.objects.filter(creater=user,status=1)  
+  
+        # 获取用户所在组的Job（这里假设一个用户可能属于多个组）  
+        groups = user.group.all().values_list('pk',flat=True)
+        jobs_by_groups = Job.objects.filter(group__in=groups,status=1).distinct()
+  
+        # 由于distinct()可能不完全可靠，特别是在多对多关系中，我们可以手动去重  
+        # 这里我们使用列表推导式和集合来确保结果唯一  
+        all_jobs = list(set(jobs_by_user.union(jobs_by_groups)))  
+  
+        return all_jobs

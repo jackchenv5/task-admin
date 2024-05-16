@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+User = get_user_model()
 from task.models import TaskStatus,JobStatus,TaskCategory,Tag,Granularity,Task,Job,Test
 class TaskStatusSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,18 +28,22 @@ class GranularitySerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class TaskSerializer(serializers.ModelSerializer):
-    create_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True)
-    done_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True)
-    deadline_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=TaskCategory.objects.all(), required=False)
+    creater = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    receiver = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    create_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True,required=False)
+    done_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True,required=False)
+    deadline_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True,required=False)
     class Meta:
         model = Task
-        fields = ['id','category','content','challenge','creater','receiver','create_time','done_time','deadline_time','status','tags']
+        fields = ['id','category','content','challenge','creater','receiver','create_time','done_time','deadline_time','workload','status','tags']
 
 class JobSerializer(serializers.ModelSerializer):
-    creater_name = serializers.SerializerMethodField()
-    group_name = serializers.SerializerMethodField() 
-    status_name = serializers.SerializerMethodField() 
-    granularity_name = serializers.SerializerMethodField() 
+    creater = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    creater_name = serializers.SerializerMethodField(required=False)
+    group_name = serializers.SerializerMethodField(required=False) 
+    status_name = serializers.SerializerMethodField(required=False) 
+    granularity_name = serializers.SerializerMethodField(required=False) 
     create_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',required=False)
     done_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',required=False)
     class Meta:
@@ -63,10 +68,3 @@ class JobSerializer(serializers.ModelSerializer):
         if obj.granularity is not None:  
             return obj.granularity.name
         return '未指定'  # 或者你想要的任何默认值
-
-class TestSerializer(serializers.ModelSerializer):
-    start_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
-    #     # 如果你需要支持更新关联关系，可以重写update方法  
-    class Meta:
-        model = Test
-        fields = ['id', 'name','status','users','start_time']

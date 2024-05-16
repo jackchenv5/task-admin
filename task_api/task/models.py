@@ -59,6 +59,8 @@ class AbstractTask(models.Model):
     #负责人
     receiver = models.ManyToManyField(User,related_name="%(class)s_of_receiver")
 
+    workload = models.IntegerField(null=True,default=0)
+    
     #创建时间
     #auto_now=False 每次保存的时候，更新时间
     #auto_now_add=True 创建时间，不可改变 这样不利于拷贝

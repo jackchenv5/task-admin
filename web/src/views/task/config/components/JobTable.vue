@@ -150,13 +150,18 @@ import { groupListApi } from '@/api/task/group';
     if (valid) {
       try {
         const data = cloneDeep(record.editValueRefs);
-        data['creater'] = record.creater_name
-        data['status'] = record.status_name
-        data['granularity'] = record.granularity_name
-        data['group'] = record.group_name
-        console.log(data);
+        const postData = {}
+        //没修改
+        console.log('record',record)
+        console.log('data',data)
+        console.log('record.group_name === data.group_name',record.group_name,data.group_name)
+        if(record.creater_name !== data.creater_name) postData['creater'] = data.creater_name
+        if(record.status_name !== data.status_name) postData['status'] = data.status_name
+        if(record.granularity_name !== data.granularity_name) postData['granularity'] = data.granularity_name
+        if(record.group !== data.group_name) postData['group'] = data.group_name
+        console.log(postData);
         //TODO 此处将数据提交给服务器保存
-        jobModifyApi(record.id,data)
+        jobModifyApi(record.id,postData)
         // ...
         // 保存之后提交编辑状态
         const pass = await record.onEdit?.(false, true);

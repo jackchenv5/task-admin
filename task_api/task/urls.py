@@ -1,5 +1,5 @@
 from django.urls import path
-from task.views import TaskStatusViewSet,JobStatusViewSet,TaskCategoryViewSet,TagViewSet,GranularityViewSet,TaskViewSet,JobViewSet,TestViewSet
+from task.views import TaskStatusViewSet,JobStatusViewSet,TaskCategoryViewSet,TagViewSet,GranularityViewSet,TaskViewSet,JobViewSet, UserJobsListView
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
@@ -12,8 +12,9 @@ router.register(r'tags', TagViewSet, basename='tag')
 router.register(r'granularity', GranularityViewSet, basename='granularity')
 router.register(r'tasks', TaskViewSet, basename='task')
 router.register(r'jobs', JobViewSet, basename='job')
-router.register(r'tests', TestViewSet, basename='test')
+
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('jobs/by-user/<int:userid>/', UserJobsListView.as_view(), name='user-jobs-by-username'),  
 ]
