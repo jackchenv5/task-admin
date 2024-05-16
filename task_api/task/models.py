@@ -54,10 +54,10 @@ class AbstractTask(models.Model):
     challenge = models.CharField(max_length=2056,null=True)
     
     #创建人
-    creater = models.ForeignKey(User,related_name="%(class)s_of_creater",on_delete=models.CASCADE)
+    creater = models.ForeignKey(User,related_name="%(class)s_of_creater",on_delete=models.CASCADE,null=True)
 
     #负责人
-    receiver = models.ManyToManyField(User,related_name="%(class)s_of_receiver")
+    receiver = models.ForeignKey(User,related_name="%(class)s_of_receiver",on_delete=models.CASCADE,null=True)
 
     workload = models.IntegerField(null=True,default=0)
     
@@ -71,7 +71,7 @@ class AbstractTask(models.Model):
     done_time = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,default=timezone.now )
     
     #截至时间
-    deadline_time = models.DateTimeField(auto_now=False,auto_now_add=False,default=timezone.now )
+    deadline_time = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,default=timezone.now )
 
     #任务状态
     status = models.ForeignKey(TaskStatus,on_delete=models.SET_NULL,null=True)
