@@ -3,12 +3,12 @@ import { api } from '@/utils/http/axios';
 enum Api {
   TASK_LIST = '/tasks',
   TASKSTATUS_LIST = '/task_status',
-  GRANULARITY_LIST = '/granularity',
+  CATEGORY_LIST = '/task_category',
 }
 
-export const granularityListApi = () =>
+export const categoryListApi = () =>
   api.get({
-    url: Api.GRANULARITY_LIST,
+    url: Api.CATEGORY_LIST,
     headers: {
       // @ts-ignore
       ignoreCancelToken: true,

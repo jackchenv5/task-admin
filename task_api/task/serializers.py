@@ -38,10 +38,17 @@ class TaskSerializer(serializers.ModelSerializer):
     category_name = serializers.SerializerMethodField(required=False)
     creater_name = serializers.SerializerMethodField(required=False)
     receiver_name = serializers.SerializerMethodField(required=False)
+    status_name = serializers.SerializerMethodField(required=False)
+    related_task_name = serializers.SerializerMethodField(required=False)
     class Meta:
         model = Task
-        fields = ['id','name','category','content','challenge','creater','receiver','start_time','done_time','deadline_time','workload','status','related_task','tags'
-                  ,'category_name','creater_name','receiver_name']
+        fields = ['id','name','category','content','challenge','creater','receiver','start_time','done_time','deadline_time','workload','status','related_task_name','related_task','tags'
+                  ,'category_name','creater_name','receiver_name','status_name']
+    
+    def get_status_name(self, obj):  
+        if obj.status is not None:  
+            return obj.status.name  
+        return '未指定'  # 或者你想要的任何默认值
     
     def get_category_name(self, obj):  
         if obj.creater is not None:  
@@ -56,6 +63,11 @@ class TaskSerializer(serializers.ModelSerializer):
     def get_receiver_name(self, obj):  
         if obj.receiver is not None:  
             return obj.receiver.username  
+        return '未指定'  # 或者你想要的任何默认值
+
+    def get_related_task_name(self, obj):  
+        if obj.related_task is not None:  
+            return obj.related_task.name  
         return '未指定'  # 或者你想要的任何默认值
 
 class JobSerializer(serializers.ModelSerializer):

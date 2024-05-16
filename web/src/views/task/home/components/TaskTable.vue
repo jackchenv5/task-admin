@@ -22,7 +22,7 @@
     ActionItem,
     EditRecordRow,
   } from '@/components/Table';
-  import { taskAddApi, taskDeleteApi, taskListApi, taskModifyApi } from '@/api/task/task';
+  import { taskAddApi, taskDeleteApi, taskListApi, taskModifyApi,categoryListApi, taskStatusListApi } from '@/api/task/task';
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
   import { userListApi } from '@/api/task/user';
@@ -34,16 +34,36 @@
           width: 80,
         },
         {
+        title: '名称',
+        dataIndex: 'name',
+        editRow: true,
+        width: 150,
+      },
+        {
           title: '执行者',
           dataIndex: 'receiver_name',
           editRow: true,
           width: 150,
+          editComponent: 'ApiSelect',
+          editComponentProps: {
+            api: userListApi,
+            resultField: 'items',
+            labelField: 'username',
+            valueField: 'id',
+          },
         },
         {
           title: '任务类型',
           dataIndex: 'category_name',
           editRow: true,
           width: 150,
+          editComponent: 'ApiSelect',
+          editComponentProps: {
+            api: categoryListApi,
+            resultField: 'items',
+            labelField: 'name',
+            valueField: 'id',
+          },
         },
         {
       title: '开始时间',
@@ -69,14 +89,28 @@
     },
       {
         title: '关联任务ID',
-        dataIndex: 'related_task',
+        dataIndex: 'related_task_name',
         editRow: true,
         width: 150,
+        editComponent: 'ApiSelect',
+        editComponentProps: {
+          api: taskListApi,
+          resultField: 'items',
+          labelField: 'name',
+          valueField: 'id',
+        },
       },
       {
         title: '状态',
-        dataIndex: 'status',
-        editRow: false,
+        dataIndex: 'status_name',
+        editRow: true,
+        editComponent: 'ApiSelect',
+        editComponentProps: {
+          api: taskStatusListApi,
+          resultField: 'items',
+          labelField: 'name',
+          valueField: 'id',
+        },
         width: 150,
       },
       {
@@ -125,15 +159,14 @@
     if (valid) {
       try {
         const data = cloneDeep(record.editValueRefs);
-        const postData = {name:record.name,description:record.description}
+        const postData = {name:record.name,start_time:record.start_time,deadline_time:record.deadline_time,workload:record.workload}
         //没修改
         console.log('record',record)
         console.log('data',data)
-        console.log('record.group_name === data.group_name',record.group_name,data.group_name)
-        if( !record.creater || record.creater_name !== data.creater_name) postData['creater'] = data.creater_name
+        if( !record.receiver || record.receiver_name !== data.receiver_name) postData['receiver'] = data.receiver_name
+        if( !record.category || record.category_name !== data.category_name) postData['category'] = data.category_name
         if(!record.status || record.status_name !== data.status_name) postData['status'] = data.status_name
-        if(!record.granularity || record.granularity_name !== data.granularity_name) postData['granularity'] = data.granularity_name
-        if(!record.group || record.group !== data.group_name) postData['group'] = data.group_name
+        if(!record.related_task || record.related_task_name !== data.related_task_name) postData['related_task'] = data.related_task_name
         console.log(postData);
         //TODO 此处将数据提交给服务器保存
         taskModifyApi(record.id,postData)
