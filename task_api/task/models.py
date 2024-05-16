@@ -97,7 +97,7 @@ class Job(models.Model):
     creater = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
 
     #项目名
-    name = models.CharField(max_length=512,unique=True,null=True)
+    name = models.CharField(max_length=512,null=True)
 
     #工作组
     group = models.ForeignKey(Group,related_name="jobs",on_delete=models.CASCADE,null=True)
@@ -106,10 +106,13 @@ class Job(models.Model):
     status = models.ForeignKey(JobStatus,on_delete=models.SET_NULL,null=True)
     
     #创建时间
-    create_time = models.DateTimeField(auto_now=False,auto_now_add=True,null=True)
+    create_time = models.DateTimeField(auto_now=True)
+
+    #任务开始时间
+    start_time = models.DateTimeField(auto_now=False,auto_now_add=False,null=True)
     
     #完成时间,用于标记
-    done_time = models.DateTimeField(auto_now=False,auto_now_add=False,default=timezone.now,null=True)
+    done_time = models.DateTimeField(auto_now=False,auto_now_add=False,null=True)
     
     #描述信息
     description = models.CharField(max_length=512,null=True)

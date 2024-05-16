@@ -20,7 +20,7 @@
         </Card>
       </div>
       <div style="width:80%" >
-        <EditRowTable/>
+        <TaskTable/>
         <div class="flex mt-4  flex">
           <div class="flex flex-row flex-grow" style="height:18vh">
             <div class="flex flex-col w-full">
@@ -47,6 +47,7 @@
   import { PageWrapper } from '@/components/Page';
   import Header from './components/Header.vue';
   import EditRowTable from './components/EditRowTable.vue'
+import TaskTable from './components/TaskTable.vue';
 
   const loading = ref(true);
 

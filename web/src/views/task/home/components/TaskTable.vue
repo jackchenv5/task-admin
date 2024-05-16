@@ -2,7 +2,7 @@
   <div class="p-0">
     <BasicTable @register="registerTable" @edit-change="onEditChange">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate"> 新增工作流 </a-button>
+        <a-button type="primary" @click="handleCreate"> 新增任务 </a-button>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
@@ -22,11 +22,10 @@
     ActionItem,
     EditRecordRow,
   } from '@/components/Table';
-  import { granularityListApi, jobAddApi, jobDeleteApi, jobListApi, jobModifyApi, jobStatusListApi } from '@/api/task/job';
+  import { taskAddApi, taskDeleteApi, taskListApi, taskModifyApi } from '@/api/task/task';
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
-import { userListApi } from '@/api/task/user';
-import { groupListApi } from '@/api/task/group';
+  import { userListApi } from '@/api/task/user';
 
   const columns: BasicColumn[] = [
         {
@@ -36,13 +35,13 @@ import { groupListApi } from '@/api/task/group';
         },
         {
           title: '执行者',
-          dataIndex: 'receiver',
+          dataIndex: 'receiver_name',
           editRow: true,
           width: 150,
         },
         {
           title: '任务类型',
-          dataIndex: 'category',
+          dataIndex: 'category_name',
           editRow: true,
           width: 150,
         },
@@ -68,20 +67,24 @@ import { groupListApi } from '@/api/task/group';
       },
       width: 150,
     },
-        {
-          title: '关联任务ID',
-          dataIndex: 'related_task',
-          editRow: true,
-          // 默认必填校验
-          editRule: true,
-          width: 150,
-        },
-        {
-          title: '状态',
-          dataIndex: 'status',
-          editRow: false,
-          width: 150,
-        },
+      {
+        title: '关联任务ID',
+        dataIndex: 'related_task',
+        editRow: true,
+        width: 150,
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        editRow: false,
+        width: 150,
+      },
+      {
+        title: '工作量',
+        dataIndex: 'workload',
+        editRow: false,
+        width: 60,
+      },
   ];
   const { createMessage: msg } = useMessage();
   const currentEditKeyRef = ref('');
@@ -90,10 +93,10 @@ import { groupListApi } from '@/api/task/group';
     // titleHelpMessage: [
     //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
     // ],
-    api: jobListApi,
+    api: taskListApi,
     columns: columns,
     canResize: true,
-    // resizeHeightOffset:500,
+    resizeHeightOffset:220,
     bordered: false,
     showIndexColumn: false,
     showTableSetting: true,
@@ -133,7 +136,7 @@ import { groupListApi } from '@/api/task/group';
         if(!record.group || record.group !== data.group_name) postData['group'] = data.group_name
         console.log(postData);
         //TODO 此处将数据提交给服务器保存
-        jobModifyApi(record.id,postData)
+        taskModifyApi(record.id,postData)
         // ...
         // 保存之后提交编辑状态
         const pass = await record.onEdit?.(false, true);
@@ -154,7 +157,7 @@ import { groupListApi } from '@/api/task/group';
       //TODO 此处将数据提交给服务器保存
       // methods.reload()
       try{
-        await jobDeleteApi(record.id);
+        await taskDeleteApi(record.id);
         msg.success({ content: `${record.name}删除成功！`, key: 'delete' });
       } catch (e){
         msg.success({ content: `${record.name}删除失败！`, key: 'delete' });
@@ -205,7 +208,7 @@ import { groupListApi } from '@/api/task/group';
   }
 
   async function handleCreate(){
-    await jobAddApi()
+    await taskAddApi()
     // 刷新
     await methods.reload()
     const data = methods.getDataSource()

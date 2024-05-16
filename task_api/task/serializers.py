@@ -32,7 +32,7 @@ class TaskSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=TaskCategory.objects.all(), required=False)
     creater = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
     receiver = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
-    create_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True,required=False)
+    start_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True,required=False)
     done_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True,required=False)
     deadline_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S',allow_null=True,required=False)
     category_name = serializers.SerializerMethodField(required=False)
@@ -40,7 +40,7 @@ class TaskSerializer(serializers.ModelSerializer):
     receiver_name = serializers.SerializerMethodField(required=False)
     class Meta:
         model = Task
-        fields = ['id','name','category','content','challenge','creater','receiver','create_time','done_time','deadline_time','workload','status','related_task','tags'
+        fields = ['id','name','category','content','challenge','creater','receiver','start_time','done_time','deadline_time','workload','status','related_task','tags'
                   ,'category_name','creater_name','receiver_name']
     
     def get_category_name(self, obj):  

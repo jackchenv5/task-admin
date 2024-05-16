@@ -1,13 +1,7 @@
 <template>
   <div class="lg:flex">
     <div class="md:ml-6 flex flex-col justify-center md:mt-0 my-2">
-      <Button type="primary" size="large">创建新任务</Button>
-    </div>
-    <div class="md:ml-6 flex flex-col justify-center md:mt-0 my-2">
-      <Button size="large" danger >下发任务</Button>
-    </div>
-    <div class="md:ml-6 flex flex-col justify-center md:mt-0 my-2">
-      <Button type="warning" size="large">新工作流</Button>
+      <Button size="large" danger type="primary" >下发任务</Button>
     </div>
     <div class="flex flex-1 mt-4 my-2 justify-end">
       <Button type="primary" size="large" class="mr-4">我的任务</Button>
