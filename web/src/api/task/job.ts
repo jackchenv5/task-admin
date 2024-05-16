@@ -47,5 +47,5 @@ export const jobModifyApi =  (pk,data) =>
 export const jobAddApi =  () =>
     api.post({
       url: `${Api.JOB_LIST}/`,
-      params:{name:'请输入名称',creater:1,group:1,create_time:"1991-01-01 00:00",done_time:"1991-01-01 00:00"}
+      params:{name:'请输入名称'}
     });

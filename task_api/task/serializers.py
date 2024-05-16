@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from user.models import Group
 User = get_user_model()
-from task.models import TaskStatus,JobStatus,TaskCategory,Tag,Granularity,Task,Job,Test
+from task.models import TaskStatus,JobStatus,TaskCategory,Tag,Granularity,Task,Job
 class TaskStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskStatus
@@ -40,6 +41,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class JobSerializer(serializers.ModelSerializer):
     creater = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False)
     creater_name = serializers.SerializerMethodField(required=False)
     group_name = serializers.SerializerMethodField(required=False) 
     status_name = serializers.SerializerMethodField(required=False) 

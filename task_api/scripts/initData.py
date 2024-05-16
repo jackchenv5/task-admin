@@ -16,7 +16,7 @@ django.setup()
 # 初始化 Gramularity
 
 from task.models import Granularity,JobStatus,TaskCategory,TaskStatus,Tag
-from django.contrib.auth.models import Group
+from user.models import Group,User
 group_list =['组1','组2','组3']
 granularity_list = ['周','两周','月']
 job_status_list = ['活跃','不活跃'] 
@@ -40,7 +40,9 @@ for tmp_list in init_list:
 
 
 #初始化用户
-User.objects.create_user(username='test1', email='myuser@example.com', password='123.com',emp_num="123").save()
-User.objects.create_superuser(username='admin', email='myuser@example.com', password='123.com',emp_num="456").save()
+#User.objects.create_superuser(username='admin', email='myuser@example.com', password='123.com').save()
+User.objects.create_user(username='test1', email='myuser@example.com', password='123.com',).save()
+User.objects.create_user(username='test2', email='myuser@example.com', password='123.com',).save()
+User.objects.create_user(username='test3', email='myuser@example.com', password='123.com',).save()
 
 

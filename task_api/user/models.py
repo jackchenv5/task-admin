@@ -10,7 +10,7 @@ class Role(models.Model):
         return self.name
 
 class User(AbstractUser):
-    emp_num = models.CharField(max_length=15, blank=True,unique=True)
+    emp_num = models.CharField(max_length=15, blank=True,null=True)
     role = models.ForeignKey(Role,on_delete=models.SET_NULL,null=True)
     class Meta:  
         db_table = 'user'

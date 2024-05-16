@@ -94,13 +94,13 @@ class Granularity(models.Model):
 class Job(models.Model):
     
     #创建人
-    creater = models.ForeignKey(User,on_delete=models.CASCADE)
+    creater = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
 
     #项目名
     name = models.CharField(max_length=512,unique=True,null=True)
 
     #工作组
-    group = models.ForeignKey(Group,related_name="jobs",on_delete=models.CASCADE)
+    group = models.ForeignKey(Group,related_name="jobs",on_delete=models.CASCADE,null=True)
     
     #状态
     status = models.ForeignKey(JobStatus,on_delete=models.SET_NULL,null=True)
@@ -130,9 +130,3 @@ class Task(AbstractTask):
         db_table = 'task'
     def __str__(self):
         return self.name
-
-class Test(models.Model):
-    name= models.CharField(max_length=20)
-    start_time = models.DateTimeField(auto_now_add=True)
-    status = models.ForeignKey(TaskStatus,on_delete=models.CASCADE)
-    users = models.ManyToManyField(User,related_name='%(class)s')
