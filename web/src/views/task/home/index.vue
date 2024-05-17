@@ -4,13 +4,12 @@
     <div class="flex">
       <div style="width: 20%;" class="mr-2">
         <Card title="我的工作流">
-          <p v-for="item in curJobList"><a>{{`${item.name}:${item.status}`}}</a></p>
+          <p v-for="item in curJobList"><a>{{`${item.name}:${item.status_name}`}}</a></p>
         </Card>
         <Card title="相关信息" class="mt-2">
           <p>执行人：陈成</p>
           <p>关联任务：</p>
-          <p><a>任务ID1：2024-05-11~2024-05-22</a></p>
-          <p><a>任务ID2：2024-05-22~2024-05-28</a></p>
+          <p v-for="item in curRelatedTasks"><a>{{ `${item.name}:${item.start_time}~${item.deadline_time}` }}</a></p>
           <p>剩余总工时：8/22 天</p>
         </Card>
         <Card title="任务自述" class="mt-2">

@@ -66,14 +66,14 @@ class AbstractTask(models.Model):
     #创建时间
     #auto_now=False 每次保存的时候，更新时间
     #auto_now_add=True 创建时间，不可改变 这样不利于拷贝
-    create_time = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,default=timezone.now)
+    create_time = models.DateField(auto_now=False,auto_now_add=False,null=True)
     
-    start_time = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,default=timezone.now )
+    start_time = models.DateField(auto_now=False,auto_now_add=False,null=True)
     #完成时间,用于标记
-    done_time = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,default=timezone.now )
+    done_time = models.DateField(auto_now=False,auto_now_add=False,null=True)
     
     #截至时间
-    deadline_time = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,default=timezone.now )
+    deadline_time = models.DateField(auto_now=False,auto_now_add=False,null=True)
 
     #任务状态
     status = models.ForeignKey(TaskStatus,on_delete=models.SET_NULL,null=True)
