@@ -79,12 +79,12 @@ export const useTaskStore = defineStore({
     },
     init(){
       //根据当前用户获取关联Job列表
-      this.setjobList(2)
+      this.setjobList(1)
       //根据用户Job激活状态选取默认Job
       //根据Job获取任务列表
-      this.setTaskInfo(1)
+      this.setTaskInfo(2)
       //获取默认显示的任务信息
-      this.setRelatedTasks(2)
+      this.setRelatedTasks(1)
     }
   }
   });
