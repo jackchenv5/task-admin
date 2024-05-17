@@ -4,7 +4,16 @@ enum Api {
   JOB_LIST = '/jobs',
   JOBSTATUS_LIST = '/job_status',
   GRANULARITY_LIST = '/granularity',
+  JOBBYUSER_LIST = '/jobs/by-user/',
 }
+export const jobByUserListApi = (userId) =>
+  api.get({
+    url: `${Api.JOBBYUSER_LIST}/${userId}`,
+    headers: {
+      // @ts-ignore
+      ignoreCancelToken: true,
+    },
+  });
 
 export const granularityListApi = () =>
   api.get({

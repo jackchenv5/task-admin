@@ -4,9 +4,7 @@
     <div class="flex">
       <div style="width: 20%;" class="mr-2">
         <Card title="我的工作流">
-          <p><a>3月任务书：角色：管理员</a></p>
-          <p><a>4月任务书：角色：编排人员</a></p>
-          <p><a>5月任务书：角色：执行人员</a></p>
+          <p v-for="item in curJobList"><a>{{`${item.name}:${item.status}`}}</a></p>
         </Card>
         <Card title="相关信息" class="mt-2">
           <p>执行人：陈成</p>
@@ -42,12 +40,30 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref,computed,watch,onMounted } from 'vue';
   import {Textarea,Card } from 'ant-design-vue';
   import { PageWrapper } from '@/components/Page';
   import Header from './components/Header.vue';
-  import EditRowTable from './components/EditRowTable.vue'
-import TaskTable from './components/TaskTable.vue';
+  import { useTaskStore } from '@/store/modules/task';
+  import TaskTable from './components/TaskTable.vue';
+  const store = useTaskStore()
+
+  const curJobList = computed(()=> store.getJobList )
+  const curTaskInfo = computed(()=>store.getTaskInfo)
+  const curRelatedTasks = computed(()=> store.getRelatedTasksList)
+  console.log('curJobList',curJobList.value)
+  console.log('curTaskInfo',curTaskInfo.value)
+  console.log('curRelatedTasks',curRelatedTasks.value)
+  watch(curJobList,()=>{
+    console.log('curJobList=>',curJobList.value)
+  })
+  watch(curTaskInfo,()=>{
+    console.log('curTaskInfo=>',curTaskInfo.value)
+  })
+
+  onMounted(() => {
+    store.init()
+  });
 
   const loading = ref(true);
 

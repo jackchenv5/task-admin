@@ -93,7 +93,23 @@ class JobViewSet(viewsets.ModelViewSet):
             'type': 'success',  
         })
 
+class UserTaskListView(generics.ListAPIView):  
+    serializer_class = TaskSerializer  
   
+    def get_queryset(self):  
+        # 获取请求中的用户名  
+        userid = self.kwargs.get('userid')  
+        try:  
+            user = User.objects.get(id=userid)  
+        except User.DoesNotExist:  
+            return Job.objects.none()  # 返回一个空的Job查询集  
+  
+        # 获取用户创建的Job  
+        tasks = Task.objects.filter(receiver=user)  
+  
+        return tasks
+
+
 class UserJobsListView(generics.ListAPIView):  
     serializer_class = JobSerializer  
   

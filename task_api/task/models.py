@@ -53,6 +53,8 @@ class AbstractTask(models.Model):
     # 挑战目标
     challenge = models.CharField(max_length=2056,null=True)
     
+    # 反馈
+    feedback = models.CharField(max_length=2056,null=True)
     #创建人
     creater = models.ForeignKey(User,related_name="%(class)s_of_creater",on_delete=models.CASCADE,null=True)
 

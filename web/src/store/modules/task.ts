@@ -4,15 +4,9 @@ import { defineStore } from 'pinia';
 import { store } from '@/store';
 import { useUserStore } from './user';
 import { number } from 'vue-types';
+import { jobByUserListApi } from '@/api/task/job';
+import { taskByUserListApi, taskDeleteApi, taskDetailApi } from '@/api/task/task';
 
-interface TaskInfo {
-  reciver: string;
-  workload:number;
-  all:number;
-  related_tasks: RelatedTask[],
-  content:string;
-  challege:string;
-}
 interface RelatedTask {
   id:string;
   startime:string;
@@ -20,17 +14,13 @@ interface RelatedTask {
   workload:string;
 }
 
-interface Job {
-  id:string;
-  role:string;
-  name:string;
-}
 interface TaskState {
   // Permission code list
   // 权限代码列表
-  jobList: Job[];
+  jobList: Recordable[];
   //当前任务信息
-  taskInfo:TaskInfo;
+  taskInfo:Recordable;
+  relatedTasks: RelatedTask[],
   // //任务列表
   // taskList:TaskInfo[];
   curJobID:number;
@@ -42,7 +32,8 @@ export const useTaskStore = defineStore({
   id: 'app-task',
   state: (): TaskState => ({
     // 我的Job列表
-    taskInfo:{reciver:"",related_tasks:[],workload:0,all:0,  content:"",challege:""},
+    taskInfo:{},
+    relatedTasks:[],
     curJobID:0,
     curTaskId:0,
     jobList: [],
@@ -59,22 +50,41 @@ export const useTaskStore = defineStore({
     getTaskInfo(state){
       return state.taskInfo;
     },
+    getRelatedTasksList(state){
+      return state.relatedTasks;
+    },
   },
   actions: {
-    setjobList(userId) {
+    async setjobList(userId) {
       //TODO
+      const data = await jobByUserListApi(userId)
+      console.log('job by user data:',data)
+      this.jobList = data
     },
     setCurTaskId(curTaskId) {
       this.curTaskId = curTaskId
+      this.setTaskInfo(this.curTaskId)
     },
-    setTaskInfo() {
+    async setTaskInfo(taskId) {
       //TODO
+      const data = await taskDetailApi(taskId)
+      this.taskInfo = data
+      console.log('taskInfo data===>',data)
+    },
+    async setRelatedTasks(userId) {
+      //TODO
+      const data = await taskByUserListApi(userId)
+      this.relatedTasks = data
+      console.log('taskInfo data===>',data)
     },
     init(){
       //根据当前用户获取关联Job列表
+      this.setjobList(2)
       //根据用户Job激活状态选取默认Job
       //根据Job获取任务列表
+      this.setTaskInfo(1)
       //获取默认显示的任务信息
+      this.setRelatedTasks(2)
     }
   }
   });

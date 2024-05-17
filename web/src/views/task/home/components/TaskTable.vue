@@ -165,7 +165,7 @@
         console.log('data',data)
         if(data.receiver_name !== "未指定" && (!record.receiver || record.receiver_name !== data.receiver_name)) postData['receiver'] = data.receiver_name
         if(data.category_name !== "未指定" && (!record.category || record.category_name !== data.category_name)) postData['category'] = data.category_name
-        if(data.status_name !== "未指定" && (!record.status || record.status_name !== data.status_name)) postData['status'] = data.status_name
+        if(data.status_name !== "未指定" && (!record.status || record.status !== data.status_name)) postData['status'] = data.status_name
         if(data.related_task_name !== "未指定" && (!record.related_task || record.related_task_name !== data.related_task_name)) postData['related_task'] = data.related_task_name
         console.log(postData);
         //TODO 此处将数据提交给服务器保存
