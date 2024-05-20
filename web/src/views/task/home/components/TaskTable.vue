@@ -32,12 +32,14 @@
           title: 'ID',
           dataIndex: 'id',
           width: 80,
+          fixed: 'left',
         },
         {
         title: '名称',
         dataIndex: 'name',
         editRow: true,
-        width: 150,
+        width: 200,
+        fixed: 'left',
       },
         {
           title: '执行者',
@@ -49,19 +51,6 @@
             api: userListApi,
             resultField: 'items',
             labelField: 'username',
-            valueField: 'id',
-          },
-        },
-        {
-          title: '任务类型',
-          dataIndex: 'category_name',
-          editRow: true,
-          width: 150,
-          editComponent: 'ApiSelect',
-          editComponentProps: {
-            api: categoryListApi,
-            resultField: 'items',
-            labelField: 'name',
             valueField: 'id',
           },
         },
@@ -88,19 +77,6 @@
       width: 150,
     },
       {
-        title: '关联任务ID',
-        dataIndex: 'related_task_name',
-        editRow: true,
-        width: 150,
-        editComponent: 'ApiSelect',
-        editComponentProps: {
-          api: taskListApi,
-          resultField: 'items',
-          labelField: 'name',
-          valueField: 'id',
-        },
-      },
-      {
         title: '状态',
         dataIndex: 'status_name',
         editRow: true,
@@ -116,9 +92,35 @@
       {
         title: '工作量',
         dataIndex: 'workload',
-        editRow: false,
+        editRow: true,
         width: 60,
       },
+      {
+        title: '关联任务ID',
+        dataIndex: 'related_task_name',
+        editRow: true,
+        width: 200,
+        editComponent: 'ApiSelect',
+        editComponentProps: {
+          api: taskListApi,
+          resultField: 'items',
+          labelField: 'name',
+          valueField: 'id',
+        },
+      },
+      {
+          title: '项目',
+          dataIndex: 'category_name',
+          editRow: true,
+          width: 400,
+          editComponent: 'ApiSelect',
+          editComponentProps: {
+            api: categoryListApi,
+            resultField: 'items',
+            labelField: 'name',
+            valueField: 'id',
+          },
+        },
   ];
   const { createMessage: msg } = useMessage();
   const currentEditKeyRef = ref('');
@@ -130,7 +132,7 @@
     api: taskListApi,
     columns: columns,
     canResize: true,
-    resizeHeightOffset:220,
+    resizeHeightOffset:200,
     bordered: false,
     showIndexColumn: false,
     showTableSetting: true,
@@ -215,6 +217,11 @@
           disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
           onClick: handleDelete.bind(null, record),
         },
+        {
+          label: '复制',
+          disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
+          onClick: handleDelete.bind(null, record),
+        },
       ];
     }
     return [
@@ -237,15 +244,18 @@
     if (column.dataIndex === 'id') {
       record.editValueRefs.name4.value = `${value}`;
     }
+    console.log('size===>',methods.getSize())
+    // methods.scrollTo()
     console.log(column, value, record);
   }
 
   async function handleCreate(){
     await taskAddApi()
     // 刷新
+    console.log('size===>',methods.getSize())
     await methods.reload()
     const data = methods.getDataSource()
-    const curRow = data[data.length-1]
+    const curRow = data[0]
     currentEditKeyRef.value = curRow.key
     curRow.onEdit?.(true);
   }

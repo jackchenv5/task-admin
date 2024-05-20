@@ -1,33 +1,44 @@
 <template>
   <PageWrapper>
-    <template #headerContent> <Header /> </template>
     <div class="flex">
-      <div style="width: 20%;" class="mr-2">
-        <Card title="我的工作流">
+    <div class="flex flex-col justify-center ">
+      <Button size="large" danger type="primary" >下发任务</Button>
+    </div>
+    <div class="flex flex-1  justify-end">
+      <Button type="primary" size="large" class="mr-4">我的任务</Button>
+      <Button type="primary" size="large"  class="mr-4">所有任务</Button>
+    </div>
+  </div>
+    <div class="flex mt-2">
+      <div style="width: 18%;" class="mr-2">
+        <!-- <Card title="我的工作流">
           <p v-for="item in curJobList"><a>{{`${item.name}:${item.status_name}`}}</a></p>
-        </Card>
+        </Card> -->
         <Card title="相关信息" class="mt-2">
           <p>执行人：陈成</p>
           <p>关联任务：</p>
           <p v-for="item in curRelatedTasks"><a>{{ `${item.name}:${item.start_time}~${item.deadline_time}` }}</a></p>
           <p>剩余总工时：8/22 天</p>
         </Card>
-        <Card title="任务自述" class="mt-2">
-            <Textarea rows="7"></Textarea>
-        </Card>
       </div>
-      <div style="width:80%" >
+      <div style="width:82%" >
         <TaskTable/>
         <div class="flex mt-4  flex">
-          <div class="flex flex-row flex-grow" style="height:18vh">
+          <div class="flex flex-row flex-grow-2" style="height:18vh">
             <div class="flex flex-col w-full">
               <h1 class="text-md">任务内容：</h1>
               <Textarea class="flex-grow"></Textarea>
             </div>
           </div>
-          <div class="flex flex-row flex-grow" style="height:18vh">
+          <div class="flex flex-row flex-grow-2" style="height:18vh">
             <div class="flex flex-col w-full">
               <h1 class="text-md">挑战目标：</h1>
+              <Textarea class="flex-grow"></Textarea>
+            </div>
+          </div>
+          <div class="flex flex-row flex-grow-1" style="height:18vh">
+            <div class="flex flex-col w-full">
+              <h1 class="text-md">任务自述：</h1>
               <Textarea class="flex-grow"></Textarea>
             </div>
           </div>
@@ -40,7 +51,7 @@
 </template>
 <script lang="ts" setup>
   import { ref,computed,watch,onMounted } from 'vue';
-  import {Textarea,Card } from 'ant-design-vue';
+  import {Textarea,Card,Button } from 'ant-design-vue';
   import { PageWrapper } from '@/components/Page';
   import Header from './components/Header.vue';
   import { useTaskStore } from '@/store/modules/task';
