@@ -55,8 +55,11 @@ class AbstractTask(models.Model):
     
     # 反馈
     feedback = models.CharField(max_length=2056,null=True)
+    
     #创建人
     creater = models.ForeignKey(User,related_name="%(class)s_of_creater",on_delete=models.CASCADE,null=True)
+    #
+    project = models.CharField(max_length=512,null=True)
 
     #负责人
     receiver = models.ForeignKey(User,related_name="%(class)s_of_receiver",on_delete=models.CASCADE,null=True)
@@ -77,6 +80,9 @@ class AbstractTask(models.Model):
 
     #任务状态
     status = models.ForeignKey(TaskStatus,on_delete=models.SET_NULL,null=True)
+    
+    #progress
+    progress = models.CharField(max_length=32,null=True)
     
 
     #标签
