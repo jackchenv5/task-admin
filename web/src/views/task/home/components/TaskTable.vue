@@ -11,6 +11,19 @@
       </template>
     </BasicTable>
   </div>
+  <Modal v-model:open="open" title="复制任务" @ok="handleOk">
+    <div class="flex justify-center items-center">
+      <p class="mt-3 ml-4 font-bold">指定用户：</p>
+      <Select
+      v-model:value="selectedUser"
+      mode="multiple"
+      style="width: 80%"
+      placeholder="请选择用户"
+      :options="[...Array(25)].map((_, i) => ({ value: (i + 10).toString(36) + (i + 1) }))"
+      @change="handleChange"
+      ></Select>
+    </div>
+    </Modal>
 </template>
 <script lang="ts" setup>
   import { ref } from 'vue';
@@ -26,7 +39,8 @@
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
   import { userListApi } from '@/api/task/user';
-
+  import { createPrompt } from '@/components/Prompt';
+  import {Modal,Select} from 'ant-design-vue';
   const columns: BasicColumn[] = [
         {
           title: 'ID',
@@ -225,7 +239,7 @@
         {
           label: '复制',
           disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
-          onClick: handleDelete.bind(null, record),
+          onClick: handleCreatePrompt.bind(null, record),
         },
       ];
     }
@@ -264,4 +278,19 @@
     currentEditKeyRef.value = curRow.key
     curRow.onEdit?.(true);
   }
+
+  const open = ref<boolean>(false);
+
+  const handleCreatePrompt = (record: EditRecordRow) => {
+    open.value = true;
+  };
+
+  const handleOk = (e: MouseEvent) => {
+    console.log(e);
+    open.value = false;
+  };
+  const handleChange = (value: string[]) => {
+  console.log(`selected ${value}`);
+};
+const selectedUser = ref(['a1', 'b2']);
 </script>
