@@ -31,7 +31,8 @@ class TaskFilter(filters.FilterSet):
         fields = ['start_time', 'deadline_time', 'receiver', 'status','search_text']  # 这里只列出用于自动生成查询参数的字段  
   
      
-    def filter_search_text(queryset, value):  
+    def filter_search_text(queryset,value): 
+        print("name, value", value)
         from django.db.models import Q 
         if value:  
             return queryset.filter(  

@@ -75,12 +75,7 @@
   import { groupListApi } from '@/api/task/group';
   import { userListApi } from '@/api/task/user';
   import { taskAddApi, taskDeleteApi, taskListApi, taskModifyApi,categoryListApi, taskStatusListApi } from '@/api/task/task';
-  type RangeValue = [Dayjs, Dayjs];
-  const value1 = ref();
-  const value4 = ref();
-  const value2 = ref('lucy');
-  const value3 = ref('lucy');
-  const groupSeleted = ref('');
+
 
   const store = useTaskStore()
   const curTaskInfo = computed(()=>store.getTaskInfo)
@@ -94,13 +89,12 @@
       group:"",
       searchText:""
   })
-  watch(getFilterInfo,()=>{
-    console.log('==========================================getFilterInfo===>',filterInfo)
-  })
 
   watch(filterInfo,()=>{
     console.log('filterInfo===>',filterInfo)
     store.setFilterInfo(filterInfo)
+    const data = taskListApi(buildQueryParams(filterInfo))
+    console.log('===========data:',data)
   })
   onMounted(() => {
     store.init()
@@ -111,4 +105,18 @@
   setTimeout(() => {
     loading.value = false;
   }, 1500);
+
+  function buildQueryParams(paramsObj) {  
+  const queryParams = [];  
+  
+  for (let key in paramsObj) {  
+    if (paramsObj.hasOwnProperty(key) && paramsObj[key] !== '') {  
+      // 转换 key 为 snake_case（如果需要） 
+      console.log('key','data',key,paramsObj[key]);
+      const snakeCaseKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();  
+      queryParams.push(encodeURIComponent(snakeCaseKey) + '=' + encodeURIComponent(paramsObj[key]));  
+    }  
+  }  
+  return queryParams.join('&');  
+}  
 </script>
