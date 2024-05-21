@@ -7,25 +7,18 @@
     <div style="width: 0%;"><p ></p></div>
     <div class="flex flex-1  justify-start items-center" style="width: 100%;">
       <p class="font-bold mt-3">开始：</p>
-      <DatePicker v-model:value="value1" size="middle" style="width: 115px"/>
+      <DatePicker v-model:value="filterInfo.startTime" size="middle" style="width: 115px"/>
       <p class="font-bold mt-3 ml-4">截止：</p>
-      <DatePicker v-model:value="value4" size="middle" style="width: 115px;"/>
+      <DatePicker v-model:value="filterInfo.deadlineTime" size="middle" style="width: 115px;"/>
       <p class="mt-3 ml-4 font-bold">组：</p>
-      <ApiSearchSelect style="width: 115px" :api="groupListApi" result-field="items" value-field="id" label-field="name" :value="groupSeleted" </ApiSearchSelect>
+      <ApiSearchSelect style="width: 115px"  v-model:value="filterInfo.group" :api="groupListApi" result-field="items" value-field="id" label-field="name"></ApiSearchSelect>
     <p class="mt-3 ml-4 font-bold">执行者：</p>
-    <ApiSearchSelect style="width: 115px" :api="userListApi" result-field="items" value-field="id" label-field="username"  </ApiSearchSelect>
+    <ApiSearchSelect style="width: 115px" v-model:value="filterInfo.receiver" :api="userListApi" result-field="items" value-field="id" label-field="username"></ApiSearchSelect>
     <p class="mt-3 ml-4 font-bold">状态：</p>
-      <Select class=""
-      ref="select"
-      v-model:value="value2"
-      style="width: 90px"
-    >
-      <SelectOption value="jack">已发布</SelectOption>
-      <SelectOption value="lucy">未发布</SelectOption>
-    </Select>
+    <ApiSelect style="width: 115px" v-model:value="filterInfo.status" :api="taskStatusListApi" result-field="items" value-field="id" label-field="name"></ApiSelect>
     <p class="mt-3 ml-4 font-bold">查询：</p>
     <InputSearch class=""
-      v-model:value="value3" style="min-width: 200px;width: 300px"
+    v-model:value="filterInfo.searchText" style="min-width: 200px;width: 300px"
       placeholder="支持任务名、工作内容、挑战目标、任务自述"
       enter-button
     />
@@ -70,16 +63,18 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { ref,computed,watch,onMounted } from 'vue';
+  import { ref,computed,watch,onMounted,reactive } from 'vue';
   import {Textarea,Card,Button,TypographyTitle,RangePicker,Select,SelectOption,DatePicker,InputSearch } from 'ant-design-vue';
   import { PageWrapper } from '@/components/Page';
   import Header from './components/Header.vue';
   import { useTaskStore } from '@/store/modules/task';
   import TaskTable from './components/TaskTable.vue';
+  import  ApiSelect  from '@/components/Form/src/components/ApiSelect.vue'
   import  ApiSearchSelect  from '@/components/Form/src/components/ApiSearchSelect.vue'
   import type { Dayjs } from 'dayjs';
   import { groupListApi } from '@/api/task/group';
   import { userListApi } from '@/api/task/user';
+  import { taskAddApi, taskDeleteApi, taskListApi, taskModifyApi,categoryListApi, taskStatusListApi } from '@/api/task/task';
   type RangeValue = [Dayjs, Dayjs];
   const value1 = ref();
   const value4 = ref();
@@ -88,20 +83,25 @@
   const groupSeleted = ref('');
 
   const store = useTaskStore()
-
-  const curJobList = computed(()=> store.getJobList )
   const curTaskInfo = computed(()=>store.getTaskInfo)
   const curRelatedTasks = computed(()=> store.getRelatedTasksList)
-  console.log('curJobList',curJobList.value)
-  console.log('curTaskInfo',curTaskInfo.value)
-  console.log('curRelatedTasks',curRelatedTasks.value)
-  watch(curJobList,()=>{
-    console.log('curJobList=>',curJobList.value)
+  const getFilterInfo = computed(()=> store.getFilterInfo)
+  const filterInfo = reactive({
+      receiver:"",
+      startTime:"",
+      deadlineTime:"",
+      status:"",
+      group:"",
+      searchText:""
   })
-  watch(curTaskInfo,()=>{
-    console.log('curTaskInfo=>',curTaskInfo.value)
+  watch(getFilterInfo,()=>{
+    console.log('==========================================getFilterInfo===>',filterInfo)
   })
 
+  watch(filterInfo,()=>{
+    console.log('filterInfo===>',filterInfo)
+    store.setFilterInfo(filterInfo)
+  })
   onMounted(() => {
     store.init()
   });

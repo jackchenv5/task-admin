@@ -13,7 +13,14 @@ interface RelatedTask {
   deadline:string;
   workload:string;
 }
-
+interface FilterInfo {
+  receiver:string;
+  startTime:string;
+  deadlineTime:string;
+  status:string;
+  group:string;
+  searchText:string;
+}
 interface TaskState {
   // Permission code list
   // 权限代码列表
@@ -27,6 +34,7 @@ interface TaskState {
   curTaskId:number;
   //生产环境从userStore获取。
   curUserID:number;
+  filterInfo:FilterInfo;
 }
 export const useTaskStore = defineStore({
   id: 'app-task',
@@ -37,8 +45,16 @@ export const useTaskStore = defineStore({
     curJobID:0,
     curTaskId:0,
     jobList: [],
+    filterInfo:{
+      receiver:"",
+      startTime:"",
+      deadlineTime:"",
+      status:"",
+      group:"",
+      searchText:""
+  },
     // taskList:[],
-    curUserID:2
+    curUserID:4
   }),
   getters: {
     getJobList(state){
@@ -52,6 +68,9 @@ export const useTaskStore = defineStore({
     },
     getRelatedTasksList(state){
       return state.relatedTasks;
+    },
+    getFilterInfo(state){
+      return state.filterInfo;
     },
   },
   actions: {
@@ -77,14 +96,19 @@ export const useTaskStore = defineStore({
       this.relatedTasks = data
       console.log('taskInfo data===>',data)
     },
+    async setFilterInfo(filterInfo:FilterInfo) {
+      //TODO
+      console.log('==========filterInfo=>',filterInfo);
+      this.filterInfo = filterInfo
+    },
     init(){
       //根据当前用户获取关联Job列表
       this.setjobList(1)
       //根据用户Job激活状态选取默认Job
       //根据Job获取任务列表
-      this.setTaskInfo(2)
+      this.setTaskInfo(4)
       //获取默认显示的任务信息
-      this.setRelatedTasks(1)
+      this.setRelatedTasks(4)
     }
   }
   });
