@@ -1,45 +1,56 @@
 <template>
   <PageWrapper>
-    <div class="flex">
+    <div class="flex" >
     <!-- <div class="flex flex-col justify-center ">
       <Button size="large" danger type="primary" >下发当前任务</Button>
     </div> -->
-    <div style="width: 18%;"><TypographyTitle :level="5" >任务信息：</TypographyTitle></div>
-    <div class="flex flex-1  justify-start" style="width: 82%;">
-      <TypographyTitle :level="5" class="mt-1">开始时间：</TypographyTitle>
-      <DatePicker v-model:value="value1" size="middle" />
-      <TypographyTitle :level="5" class="mt-1 ml-8">组：</TypographyTitle>
+    <div style="width: 0%;"><TypographyTitle :level="5" ></TypographyTitle></div>
+    <div class="flex flex-1  justify-start" style="width: 100%;">
+      <TypographyTitle :level="5" class="mt-1">开始：</TypographyTitle>
+      <DatePicker v-model:value="value1" size="middle" style="width: 115px"/>
+      <TypographyTitle :level="5" class="mt-1 ml-4">截止：</TypographyTitle>
+      <DatePicker v-model:value="value4" size="middle" style="width: 115px;"/>
+      <TypographyTitle :level="5" class="mt-1 ml-4">组：</TypographyTitle>
       <Select class=""
       ref="select"
       v-model:value="value2"
-      style="width: 120px"
+      style="width: 105px"
     >
       <SelectOption value="jack">Jack</SelectOption>
       <SelectOption value="lucy">Lucy</SelectOption>
       <SelectOption value="disabled" disabled>Disabled</SelectOption>
       <SelectOption value="Yiminghe">yiminghe</SelectOption>
     </Select>
-    <TypographyTitle :level="5" class="mt-1 ml-8">执行者：</TypographyTitle>
+    <TypographyTitle :level="5" class="mt-1 ml-4">执行者：</TypographyTitle>
       <Select class=""
       ref="select"
       v-model:value="value2"
-      style="width: 120px"
+      style="width: 105px"
     >
       <SelectOption value="jack">Jack</SelectOption>
       <SelectOption value="lucy">Lucy</SelectOption>
-      <SelectOption value="disabled" disabled>Disabled</SelectOption>
+      <SelectOption value="disabled">Disabled</SelectOption>
       <SelectOption value="Yiminghe">yiminghe</SelectOption>
     </Select>
-    <TypographyTitle :level="5" class="mt-1 ml-8">查询：</TypographyTitle>
+    <TypographyTitle :level="5" class="mt-1 ml-4">状态：</TypographyTitle>
+      <Select class=""
+      ref="select"
+      v-model:value="value2"
+      style="width: 90px"
+    >
+      <SelectOption value="jack">已发布</SelectOption>
+      <SelectOption value="lucy">未发布</SelectOption>
+    </Select>
+    <TypographyTitle :level="5" class="mt-1 ml-4">查询：</TypographyTitle>
     <InputSearch class=""
-      v-model:value="value3" style="width: 500px"
+      v-model:value="value3" style="min-width: 200px;width: 300px"
       placeholder="input search loading with enterButton"
       enter-button
     />
     </div>
-    <div class="justify-end mr-12"><Button size="middle" danger type="primary" >下发当前任务</Button></div>
+    <div class="justify-end mr-2"><Button size="middle" danger type="primary" >下发当前任务</Button></div>
   </div>
-    <div class="flex mt-1">
+    <div class="lg:flex  mt-1" style="min-width: 1357px!important">
       <div style="width: 18%;" class="mr-2">
         <!-- <Card title="我的工作流">
           <p v-for="item in curJobList"><a>{{`${item.name}:${item.status_name}`}}</a></p>
@@ -88,7 +99,8 @@
   import TaskTable from './components/TaskTable.vue';
   import type { Dayjs } from 'dayjs';
   type RangeValue = [Dayjs, Dayjs];
-  const value1 = ref<RangeValue>();
+  const value1 = ref();
+  const value4 = ref();
   const value2 = ref('lucy');
   const value3 = ref('lucy');
 
