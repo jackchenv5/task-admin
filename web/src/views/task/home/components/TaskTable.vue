@@ -41,6 +41,11 @@
         width: 200,
         fixed: 'left',
       },
+      {
+          title: '下发者',
+          dataIndex: 'creater_name',
+          width: 150,
+        },
         {
           title: '执行者',
           dataIndex: 'receiver_name',
@@ -100,7 +105,7 @@
         dataIndex: 'related_task_name',
         editRow: true,
         width: 200,
-        editComponent: 'ApiSelect',
+        editComponent: 'ApiSearchSelect',
         editComponentProps: {
           api: taskListApi,
           resultField: 'items',

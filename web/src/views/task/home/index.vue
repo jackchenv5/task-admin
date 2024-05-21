@@ -1,20 +1,50 @@
 <template>
   <PageWrapper>
     <div class="flex">
-    <div class="flex flex-col justify-center ">
-      <Button size="large" danger type="primary" >下发任务</Button>
+    <!-- <div class="flex flex-col justify-center ">
+      <Button size="large" danger type="primary" >下发当前任务</Button>
+    </div> -->
+    <div style="width: 18%;"><TypographyTitle :level="5" >任务信息：</TypographyTitle></div>
+    <div class="flex flex-1  justify-start" style="width: 82%;">
+      <TypographyTitle :level="5" class="mt-1">开始时间：</TypographyTitle>
+      <DatePicker v-model:value="value1" size="middle" />
+      <TypographyTitle :level="5" class="mt-1 ml-8">组：</TypographyTitle>
+      <Select class=""
+      ref="select"
+      v-model:value="value2"
+      style="width: 120px"
+    >
+      <SelectOption value="jack">Jack</SelectOption>
+      <SelectOption value="lucy">Lucy</SelectOption>
+      <SelectOption value="disabled" disabled>Disabled</SelectOption>
+      <SelectOption value="Yiminghe">yiminghe</SelectOption>
+    </Select>
+    <TypographyTitle :level="5" class="mt-1 ml-8">执行者：</TypographyTitle>
+      <Select class=""
+      ref="select"
+      v-model:value="value2"
+      style="width: 120px"
+    >
+      <SelectOption value="jack">Jack</SelectOption>
+      <SelectOption value="lucy">Lucy</SelectOption>
+      <SelectOption value="disabled" disabled>Disabled</SelectOption>
+      <SelectOption value="Yiminghe">yiminghe</SelectOption>
+    </Select>
+    <TypographyTitle :level="5" class="mt-1 ml-8">查询：</TypographyTitle>
+    <InputSearch class=""
+      v-model:value="value3" style="width: 500px"
+      placeholder="input search loading with enterButton"
+      enter-button
+    />
     </div>
-    <div class="flex flex-1  justify-end">
-      <Button type="primary" size="large" class="mr-4">我的任务</Button>
-      <Button type="primary" size="large"  class="mr-4">所有任务</Button>
-    </div>
+    <div class="justify-end mr-12"><Button size="middle" danger type="primary" >下发当前任务</Button></div>
   </div>
-    <div class="flex mt-2">
+    <div class="flex mt-1">
       <div style="width: 18%;" class="mr-2">
         <!-- <Card title="我的工作流">
           <p v-for="item in curJobList"><a>{{`${item.name}:${item.status_name}`}}</a></p>
         </Card> -->
-        <Card title="相关信息" class="mt-2">
+        <Card title="相关信息" class="">
           <p>执行人：陈成</p>
           <p>关联任务：</p>
           <p v-for="item in curRelatedTasks"><a>{{ `${item.name}:${item.start_time}~${item.deadline_time}` }}</a></p>
@@ -51,11 +81,17 @@
 </template>
 <script lang="ts" setup>
   import { ref,computed,watch,onMounted } from 'vue';
-  import {Textarea,Card,Button } from 'ant-design-vue';
+  import {Textarea,Card,Button,TypographyTitle,RangePicker,Select,SelectOption,DatePicker,InputSearch } from 'ant-design-vue';
   import { PageWrapper } from '@/components/Page';
   import Header from './components/Header.vue';
   import { useTaskStore } from '@/store/modules/task';
   import TaskTable from './components/TaskTable.vue';
+  import type { Dayjs } from 'dayjs';
+  type RangeValue = [Dayjs, Dayjs];
+  const value1 = ref<RangeValue>();
+  const value2 = ref('lucy');
+  const value3 = ref('lucy');
+
   const store = useTaskStore()
 
   const curJobList = computed(()=> store.getJobList )
