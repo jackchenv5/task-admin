@@ -11,18 +11,9 @@
       <p class="font-bold mt-3 ml-4">截止：</p>
       <DatePicker v-model:value="value4" size="middle" style="width: 115px;"/>
       <p class="mt-3 ml-4 font-bold">组：</p>
-      <ApiSearchSelect style="width: 115px" :api="groupListApi" result-field="items" value-field="id" label-field="name"</ApiSearchSelect>
+      <ApiSearchSelect style="width: 115px" :api="groupListApi" result-field="items" value-field="id" label-field="name" :value="groupSeleted" </ApiSearchSelect>
     <p class="mt-3 ml-4 font-bold">执行者：</p>
-      <Select class=""
-      ref="select"
-      v-model:value="value2"
-      style="width: 105px"
-    >
-      <SelectOption value="jack">Jack</SelectOption>
-      <SelectOption value="lucy">Lucy</SelectOption>
-      <SelectOption value="disabled">Disabled</SelectOption>
-      <SelectOption value="Yiminghe">yiminghe</SelectOption>
-    </Select>
+    <ApiSearchSelect style="width: 115px" :api="userListApi" result-field="items" value-field="id" label-field="username"  </ApiSearchSelect>
     <p class="mt-3 ml-4 font-bold">状态：</p>
       <Select class=""
       ref="select"
@@ -88,11 +79,13 @@
   import  ApiSearchSelect  from '@/components/Form/src/components/ApiSearchSelect.vue'
   import type { Dayjs } from 'dayjs';
   import { groupListApi } from '@/api/task/group';
+  import { userListApi } from '@/api/task/user';
   type RangeValue = [Dayjs, Dayjs];
   const value1 = ref();
   const value4 = ref();
   const value2 = ref('lucy');
   const value3 = ref('lucy');
+  const groupSeleted = ref('');
 
   const store = useTaskStore()
 
