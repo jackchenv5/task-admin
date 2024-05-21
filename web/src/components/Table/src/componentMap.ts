@@ -11,7 +11,7 @@ import {
   Radio,
 } from 'ant-design-vue';
 import type { ComponentType } from './types/componentType';
-import { ApiSelect, ApiTreeSelect, RadioButtonGroup, ApiRadioGroup } from '@/components/Form';
+import { ApiSelect,ApiSearchSelect, ApiTreeSelect, RadioButtonGroup, ApiRadioGroup } from '@/components/Form';
 
 const componentMap = new Map<ComponentType, Component>();
 
@@ -19,6 +19,7 @@ componentMap.set('Input', Input);
 componentMap.set('InputNumber', InputNumber);
 componentMap.set('Select', Select);
 componentMap.set('ApiSelect', ApiSelect);
+componentMap.set('ApiSearchSelect', ApiSearchSelect);
 componentMap.set('AutoComplete', AutoComplete);
 componentMap.set('ApiTreeSelect', ApiTreeSelect);
 componentMap.set('Switch', Switch);

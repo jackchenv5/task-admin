@@ -46,7 +46,7 @@
           dataIndex: 'receiver_name',
           editRow: true,
           width: 150,
-          editComponent: 'ApiSelect',
+          editComponent: 'ApiSearchSelect',
           editComponentProps: {
             api: userListApi,
             resultField: 'items',
