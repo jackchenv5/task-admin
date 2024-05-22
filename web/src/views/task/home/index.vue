@@ -24,16 +24,7 @@
   </div>
     <div class="lg:flex  mt-1" style="min-width: 1357px!important">
       <div style="width: 18%;" class="mr-2">
-        <Card title="相关信息" class="">
-          <p>执行人：陈成</p>
-          <p>关联任务：</p>
-          <p v-for="item in curRelatedTasks"><a>{{ `${item.name}:${item.start_time}~${item.deadline_time}` }}</a></p>
-          <p>剩余总工时：8/22 天</p>
-        </Card>
-      </div>
-      <div style="width:82%" >
-        <TaskTable style="min-height: 600px"/>
-        <div class="flex mt-4  flex">
+        <div class="flex mt-4 flex-col">
           <div class="flex flex-row flex-grow-2" style="height:18vh">
             <div class="flex flex-col w-full">
               <h1 class="text-md">任务内容：</h1>
@@ -53,6 +44,16 @@
             </div>
           </div>
         </div>
+        <div>
+          <p>执行人：陈成</p>
+          <p>关联任务：</p>
+          <p v-for="item in curRelatedTasks"><a>{{ `${item.name}:${item.start_time}~${item.deadline_time}` }}</a></p>
+          <p>剩余总工时：8/22 天</p>
+        </div>
+      </div>
+      <div style="width:82%" >
+        <TaskTable/>
+
       </div>
 
     </div>
