@@ -37,16 +37,21 @@
     ColumnChangeParam,
   } from '@/components/Table';
   import { taskAddApi, taskDeleteApi, taskListApi, taskModifyApi,categoryListApi, taskStatusListApi } from '@/api/task/task';
-  import { cloneDeep } from 'lodash-es';
+  import { cloneDeep,debounce  } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
   import { userListApi } from '@/api/task/user';
   import {Modal,Select} from 'ant-design-vue';
   import { useTaskStore } from '@/store/modules/task';
+  import _ from 'lodash-es';  
   const store = useTaskStore();
-  const curFilterInfo = computed(()=> store.getFilterInfo)
-  watch(curFilterInfo,()=>{
-    console.log('curFilterInfo========================================>',curFilterInfo.value)
-    methods.reload()
+  const curFilterInfo = computed(() => store.filterInfo)
+  const filterInfo = store.filterInfo
+  watch(filterInfo,()=>{
+    methods.reload({filterInfo:filterInfo})
+    // debounce(()=>{
+    //   methods.reload()
+    // },300)
+    
   })
   const columns: BasicColumn[] = [
         {
@@ -165,7 +170,7 @@
     // ],
     api: taskListApi,
     columns: columns,
-    canResize: true,
+    // canResize: true,
     resizeHeightOffset:200,
     bordered: false,
     showIndexColumn: false,

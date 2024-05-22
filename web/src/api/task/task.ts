@@ -36,7 +36,8 @@ export const taskStatusListApi = () =>
 
 export const taskListApi = (params) =>
   api.get({
-    url: `${Api.TASK_LIST}/?${params}`,
+    url: Api.TASK_LIST,
+    params:params,
     headers: {
       // @ts-ignore
       ignoreCancelToken: true,

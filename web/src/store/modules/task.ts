@@ -15,11 +15,11 @@ interface RelatedTask {
 }
 interface FilterInfo {
   receiver:string;
-  startTime:string;
-  deadlineTime:string;
+  start_time:string;
+  deadline_time:string;
   status:string;
   group:string;
-  searchText:string;
+  search_text:string;
 }
 
 interface TaskState {
@@ -50,11 +50,11 @@ export const useTaskStore = defineStore({
     jobList: [],
     filterInfo:{
       receiver:"",
-      startTime:"",
-      deadlineTime:"",
+      start_time:"",
+      deadline_time:"",
       status:"",
       group:"",
-      searchText:""
+      search_text:""
   },
     // taskList:[],
     curUserID:4
@@ -103,8 +103,19 @@ export const useTaskStore = defineStore({
     },
     async setFilterInfo(filterInfo:FilterInfo) {
       //TODO
-      console.log('==========filterInfo=>',filterInfo);
-      this.filterInfo = filterInfo
+      for (const key in filterInfo) { 
+
+        // 检查filterInfoB是否包含此属性，并且属性值是否与filterInfoA不同  
+        if (!(key in this.filterInfo) || this.filterInfo[key] !== filterInfo[key]) {  
+          // 如果不存在或值不同，将filterInfoA的属性值复制到filterInfoB 
+          if (key === 'start_time' || key === 'deadline_time') {
+            this.filterInfo[key] = filterInfo[key] ? filterInfo[key].format('YYYY-MM-DD'):""
+          }else{
+            this.filterInfo[key] = filterInfo[key]; 
+          }
+           
+        }  
+      }  
     },
     setDisabled(isDisabled:boolean) {
       //TODO

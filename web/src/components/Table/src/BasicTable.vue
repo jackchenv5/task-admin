@@ -343,7 +343,7 @@
 
   .@{prefix-cls} {
     max-width: 100%;
-    height: 100%;
+    height: 60vh;
 
     &-row__striped {
       td {
@@ -371,7 +371,7 @@
 
     .ant-table-wrapper {
       padding: 6px;
-      border-radius: 2px;
+      border-radius: 0px;
       background-color: @component-background;
 
       .ant-table-title {
@@ -418,7 +418,7 @@
 
       .ant-table-body {
         overflow-x: hidden !important;
-        //  overflow-y: scroll !important;
+         overflow-y: scroll !important;
       }
 
       td {
