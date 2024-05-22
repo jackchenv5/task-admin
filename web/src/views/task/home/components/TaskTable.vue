@@ -3,6 +3,8 @@
     <BasicTable @register="registerTable" @edit-change="onEditChange" @row-click="handleRowClick"  >
       <template #toolbar>
         <a-button type="primary" @click="handleCreate"> 新增任务 </a-button>
+        <a-button type="primary" @click="handleCreate" disabled> 转为未发布 </a-button>
+        <a-button type="primary" @click="handleCreate" disabled> 发布 </a-button>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
@@ -14,14 +16,7 @@
   <Modal v-model:open="open" title="复制任务" @ok="handleOk">
     <div class="flex justify-center items-center">
       <p class="mt-3 ml-4 font-bold">指定用户：</p>
-      <Select
-      v-model:value="selectedUser"
-      mode="multiple"
-      style="width: 80%"
-      placeholder="请选择用户"
-      :options="[...Array(25)].map((_, i) => ({ value: (i + 10).toString(36) + (i + 1) }))"
-      @change="handleChange"
-      ></Select>
+      <ApiMultiSelect style="width: 400px" v-model:value="selectedUser" :api="userListApi" result-field="items" value-field="id" label-field="username"></ApiMultiSelect>
     </div>
     </Modal>
 </template>
@@ -42,6 +37,7 @@
   import { userListApi } from '@/api/task/user';
   import {Modal,Select} from 'ant-design-vue';
   import { useTaskStore } from '@/store/modules/task';
+  import  ApiMultiSelect  from '@/components/Form/src/components/ApiMultiSelect.vue'
   import _ from 'lodash-es';  
   const store = useTaskStore();
   const curFilterInfo = computed(() => store.filterInfo)
@@ -154,7 +150,10 @@
         },
   ];
   const { createMessage: msg } = useMessage();
+  
   const currentEditKeyRef = ref('');
+  const currentCopyRow = ref();
+
   watch(currentEditKeyRef,()=>{
     console.log('currentEditKeyRef',currentEditKeyRef.value)
       if(currentEditKeyRef.value === ''){
@@ -172,7 +171,7 @@
     columns: columns,
     canResize: true,
     // resizeHeightOffset:200,
-    bordered: false,
+    bordered: true,
     showIndexColumn: false,
     showTableSetting: true,
     tableSetting: { fullScreen: false },
@@ -295,7 +294,6 @@
   }
 
   function handleRowClick(record) {
-    console.log(record);
     store.setTaskInfo(record)
     //
   }
@@ -312,13 +310,41 @@
 
   //复制按钮
   const open = ref<boolean>(false);
+  const selectedUser = ref([]);
+
+  watch(selectedUser,()=>{
+    console.log('selectedUser=>',selectedUser.value)
+  })
 
   const handleCreatePrompt = (record: EditRecordRow) => {
+    selectedUser.value = []
+    currentCopyRow.value = record
     open.value = true;
   };
-
   const handleOk = (e: MouseEvent) => {
     console.log(e);
+    //获取用户列表
+    console.log('selectedUser.value',selectedUser.value)
+
+    //获取行信息，替换user
+    console.log('currentCopyRow.value',currentCopyRow.value)
+    //状态设置为草稿
+    selectedUser.value.forEach(x=>{
+      const postData = {};
+      const postItem = ["name","receiver","creater","category","content","challenge","feedback","start_time","deadline_time","workload","status","related_task"]
+      postItem.forEach(
+        y=>{
+          if(y === 'receiver'){
+            postData['receiver'] = x
+          }else if(y === 'status'){
+            postData['status'] = 3 //草稿
+          }else{
+            postData[y] = currentCopyRow.value[y]
+          }
+          taskAddApi(postData)
+        }
+      )
+    })
     open.value = false;
   };
   const handleChange = (value: string[]) => {
