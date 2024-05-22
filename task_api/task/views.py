@@ -30,9 +30,8 @@ class TaskFilter(filters.FilterSet):
         model = Task  
         fields = ['start_time', 'deadline_time', 'receiver', 'status','search_text']  # 这里只列出用于自动生成查询参数的字段  
   
-     
-    def filter_search_text(queryset, value):  
-        from django.db.models import Q 
+    def filter_search_text(self, queryset, name, value): 
+        from django.db.models import Q  
         if value:  
             return queryset.filter(  
                 Q(content__icontains=value) |  
@@ -40,7 +39,6 @@ class TaskFilter(filters.FilterSet):
                 Q(feedback__icontains=value) |  
                 Q(name__icontains=value)  
             )  
-        return queryset
     
 
 # 自定义分页类（可选，如果需要自定义每页显示的条目数）  
@@ -109,14 +107,15 @@ class TaskViewSet(viewsets.ModelViewSet):
         filtered_tasks = task_filter.qs  
 
         # 如果提供了group_id，则进一步过滤tasks  
-        # if group_id:  
-        #     try:  
-        #         group = Group.objects.get(id=group_id)  
-        #         # 使用Django ORM来查询接收者在给定组内的任务  
-        #         filtered_tasks = filtered_tasks.filter(receiver__groups__id=group_id)  
-        #     except Group.DoesNotExist:  
-        #         # 处理组不存在的情况  
-        #         return Response({"error": "Group not found"}, status=status.HTTP_404_NOT_FOUND)  
+        print('group_id:',group_id)
+        if group_id:  
+            try:  
+                group = Group.objects.get(id=group_id)  
+                # 使用Django ORM来查询接收者在给定组内的任务  
+                filtered_tasks = filtered_tasks.filter(receiver__group__id=group_id)  
+            except Group.DoesNotExist:  
+                # 处理组不存在的情况  
+                return Response({"error": "Group not found"}, status=status.HTTP_404_NOT_FOUND)  
 
         # 使用TaskSerializer序列化查询集  
         serializer = TaskSerializer(filtered_tasks, many=True)  

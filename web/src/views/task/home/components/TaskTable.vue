@@ -43,6 +43,11 @@
   import {Modal,Select} from 'ant-design-vue';
   import { useTaskStore } from '@/store/modules/task';
   const store = useTaskStore();
+  const curFilterInfo = computed(()=> store.getFilterInfo)
+  watch(curFilterInfo,()=>{
+    console.log('curFilterInfo========================================>',curFilterInfo.value)
+    methods.reload()
+  })
   const columns: BasicColumn[] = [
         {
           title: 'ID',
@@ -158,9 +163,7 @@
     // titleHelpMessage: [
     //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
     // ],
-    clickToRowSelect:true,
     api: taskListApi,
-    clickToRowSelect:true,
     columns: columns,
     canResize: true,
     resizeHeightOffset:200,
@@ -295,7 +298,6 @@
   async function handleCreate(){
     await taskAddApi()
     // 刷新
-    console.log('size===>',methods.getSize())
     await methods.reload()
     const data = methods.getDataSource()
     const curRow = data[0]
