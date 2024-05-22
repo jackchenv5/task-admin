@@ -51,7 +51,7 @@ class TaskSerializer(serializers.ModelSerializer):
         return '未指定'  # 或者你想要的任何默认值
     
     def get_category_name(self, obj):  
-        if obj.creater is not None:  
+        if obj.category is not None:  
             return obj.category.name  
         return '未指定'  # 或者你想要的任何默认值
     

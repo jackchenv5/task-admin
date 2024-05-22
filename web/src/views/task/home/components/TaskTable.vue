@@ -338,6 +338,8 @@
             postData['receiver'] = x
           }else if(y === 'status'){
             postData['status'] = 3 //草稿
+          }else if(y === 'creater'){
+            postData['creater'] = 1 //零时
           }else{
             postData[y] = currentCopyRow.value[y]
           }

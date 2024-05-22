@@ -40,7 +40,7 @@ class Tag(models.Model):
 
 class AbstractTask(models.Model):
     #任务名
-    name = models.CharField(max_length=128, blank=True,unique=True)
+    name = models.CharField(max_length=128, blank=True)
     
     # 任务类型
     # 指向 TaskCategory 模型。related_name="tasks" 意味着，您可以通过 TaskCategory 实例的 tasks 属性来访问属于该类别的所有任务
