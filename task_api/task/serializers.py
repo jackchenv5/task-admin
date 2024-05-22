@@ -42,7 +42,7 @@ class TaskSerializer(serializers.ModelSerializer):
     related_task_name = serializers.SerializerMethodField(required=False)
     class Meta:
         model = Task
-        fields = ['id','name','category','content','challenge','creater','receiver','start_time','done_time','deadline_time','workload','status','related_task_name','related_task','tags'
+        fields = ['id','name','category','content','challenge','feedback','creater','receiver','start_time','done_time','deadline_time','workload','status','related_task_name','related_task','tags'
                   ,'category_name','creater_name','receiver_name','status_name']
     
     def get_status_name(self, obj):  

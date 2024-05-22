@@ -1,6 +1,6 @@
 <template>
   <div class="p-0">
-    <BasicTable @register="registerTable" @edit-change="onEditChange">
+    <BasicTable @register="registerTable" @edit-change="onEditChange" @row-click="handleRowClick"  >
       <template #toolbar>
         <a-button type="primary" @click="handleCreate"> 新增任务 </a-button>
       </template>
@@ -26,7 +26,7 @@
     </Modal>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref,computed,watch } from 'vue';
   import {
     BasicTable,
     useTable,
@@ -34,13 +34,15 @@
     BasicColumn,
     ActionItem,
     EditRecordRow,
+    ColumnChangeParam,
   } from '@/components/Table';
   import { taskAddApi, taskDeleteApi, taskListApi, taskModifyApi,categoryListApi, taskStatusListApi } from '@/api/task/task';
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
   import { userListApi } from '@/api/task/user';
-  import { createPrompt } from '@/components/Prompt';
   import {Modal,Select} from 'ant-design-vue';
+  import { useTaskStore } from '@/store/modules/task';
+  const store = useTaskStore();
   const columns: BasicColumn[] = [
         {
           title: 'ID',
@@ -143,12 +145,22 @@
   ];
   const { createMessage: msg } = useMessage();
   const currentEditKeyRef = ref('');
+  watch(currentEditKeyRef,()=>{
+    console.log('currentEditKeyRef',currentEditKeyRef.value)
+      if(currentEditKeyRef.value === ''){
+        store.setDisabled(true)
+      }else{
+        store.setDisabled(false)
+      }
+  })
   const [registerTable,methods] = useTable({
     // title: '可编辑行示例',
     // titleHelpMessage: [
     //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
     // ],
+    clickToRowSelect:true,
     api: taskListApi,
+    clickToRowSelect:true,
     columns: columns,
     canResize: true,
     resizeHeightOffset:200,
@@ -156,6 +168,9 @@
     showIndexColumn: false,
     showTableSetting: true,
     tableSetting: { fullScreen: false },
+    onColumnsChange: (data: ColumnChangeParam[]) => {
+      console.log('ColumnsChanged', data);
+    },
     actionColumn: {
       width: 160,
       title: 'Action',
@@ -180,7 +195,10 @@
     if (valid) {
       try {
         const data = cloneDeep(record.editValueRefs);
-        const postData = {name:record.name,start_time:record.start_time,deadline_time:record.deadline_time,workload:record.workload}
+        const postData = {
+          name:record.name,start_time:record.start_time,deadline_time:record.deadline_time,workload:record.workload,
+          content:record.content,challenge:record.challenge,feedback:record.feedback
+        }
         //没修改
         console.log('record',record)
         console.log('data',data)
@@ -268,6 +286,12 @@
     console.log(column, value, record);
   }
 
+  function handleRowClick(record) {
+    console.log(record);
+    store.setTaskInfo(record)
+    //
+  }
+  
   async function handleCreate(){
     await taskAddApi()
     // 刷新
@@ -279,6 +303,7 @@
     curRow.onEdit?.(true);
   }
 
+  //复制按钮
   const open = ref<boolean>(false);
 
   const handleCreatePrompt = (record: EditRecordRow) => {
@@ -294,3 +319,9 @@
 };
 const selectedUser = ref(['a1', 'b2']);
 </script>
+
+<style>
+.ant-table-row-selected>td {
+    background: #a5d3f0;
+}
+</style>

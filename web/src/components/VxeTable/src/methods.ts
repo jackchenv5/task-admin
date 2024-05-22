@@ -154,7 +154,7 @@ export const gridComponentMethodKeys: (
   'getEditRecord',
   'getSelectedCell',
   'clearSelected',
-  'isEditByRow',
+  'disabledByRow',
   'setEditRow',
   'setEditCell',
   'setSelectCell',

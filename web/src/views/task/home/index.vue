@@ -40,19 +40,19 @@
           <div class="flex flex-row flex-grow-2" style="height:18vh">
             <div class="flex flex-col w-full">
               <h1 class="text-md">任务内容：</h1>
-              <Textarea class="flex-grow"></Textarea>
+              <Textarea class="flex-grow" v-model:value="curTaskInfo.content" :disabled="disabled"></Textarea>
             </div>
           </div>
           <div class="flex flex-row flex-grow-2" style="height:18vh">
             <div class="flex flex-col w-full">
               <h1 class="text-md">挑战目标：</h1>
-              <Textarea class="flex-grow"></Textarea>
+              <Textarea class="flex-grow"  v-model:value="curTaskInfo.challenge" :disabled="disabled"></Textarea>
             </div>
           </div>
           <div class="flex flex-row flex-grow-1" style="height:18vh">
             <div class="flex flex-col w-full">
               <h1 class="text-md">任务自述：</h1>
-              <Textarea class="flex-grow"></Textarea>
+              <Textarea class="flex-grow"  v-model:value="curTaskInfo.feedback" :disabled="disabled"></Textarea>
             </div>
           </div>
         </div>
@@ -67,7 +67,6 @@
   import {Textarea,Card,Button,TypographyTitle,RangePicker,Select,SelectOption,DatePicker,InputSearch } from 'ant-design-vue';
   import { PageWrapper } from '@/components/Page';
   import Header from './components/Header.vue';
-  import { useTaskStore } from '@/store/modules/task';
   import TaskTable from './components/TaskTable.vue';
   import  ApiSelect  from '@/components/Form/src/components/ApiSelect.vue'
   import  ApiSearchSelect  from '@/components/Form/src/components/ApiSearchSelect.vue'
@@ -76,8 +75,9 @@
   import { userListApi } from '@/api/task/user';
   import { taskAddApi, taskDeleteApi, taskListApi, taskModifyApi,categoryListApi, taskStatusListApi } from '@/api/task/task';
 
-
+  import { useTaskStore } from '@/store/modules/task';
   const store = useTaskStore()
+  const disabled = computed(()=>store.getDisabled)
   const curTaskInfo = computed(()=>store.getTaskInfo)
   const curRelatedTasks = computed(()=> store.getRelatedTasksList)
   const getFilterInfo = computed(()=> store.getFilterInfo)

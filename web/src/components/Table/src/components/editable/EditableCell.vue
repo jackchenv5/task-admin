@@ -42,7 +42,7 @@
     },
     setup(props) {
       const table = useTableContext();
-      const isEdit = ref(false);
+      const disabled = ref(false);
       const elRef = ref();
       const ruleVisible = ref(false);
       const ruleMessage = ref('');
@@ -176,7 +176,7 @@
       watchEffect(() => {
         const { editable } = props.column;
         if (isBoolean(editable) || isBoolean(unref(getRowEditable))) {
-          isEdit.value = !!editable || unref(getRowEditable);
+          disabled.value = !!editable || unref(getRowEditable);
         }
       });
 
@@ -184,7 +184,7 @@
         e.stopPropagation();
         if (unref(getRowEditable) || unref(props.column?.editRow) || unref(getDisable)) return;
         ruleMessage.value = '';
-        isEdit.value = true;
+        disabled.value = true;
         nextTick(() => {
           const el = unref(elRef);
           el?.focus?.();
@@ -292,7 +292,7 @@
         defaultValueRef.value = value;
         //const record = await table.updateTableData(index, dataKey, value);
         needEmit && table.emit?.('edit-end', { record, index, key: dataKey, value });
-        isEdit.value = false;
+        disabled.value = false;
       }
 
       async function handleEnter() {
@@ -307,7 +307,7 @@
       }
 
       function handleCancel() {
-        isEdit.value = false;
+        disabled.value = false;
         currentValueRef.value = defaultValueRef.value;
         const { column, index, record } = props;
         const { key, dataIndex } = column;
@@ -384,7 +384,7 @@
       }
 
       return {
-        isEdit,
+        disabled,
         prefixCls,
         handleEdit,
         currentValueRef,
@@ -413,7 +413,7 @@
       return (
         <div class={this.prefixCls}>
           <div
-            v-show={!this.isEdit}
+            v-show={!this.disabled}
             class={{ [`${this.prefixCls}__normal`]: true, 'ellipsis-cell': this.column.ellipsis }}
             onClick={this.handleEdit}
           >
@@ -432,7 +432,7 @@
               <FormOutlined class={`${this.prefixCls}__normal-icon`} />
             )}
           </div>
-          {this.isEdit && (
+          {this.disabled && (
             <Spin spinning={this.spinning} onClick={(e) => e.stopPropagation()}>
               <div
                 class={`${this.prefixCls}__wrapper`}

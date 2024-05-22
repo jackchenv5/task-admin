@@ -21,12 +21,14 @@ interface FilterInfo {
   group:string;
   searchText:string;
 }
+
 interface TaskState {
   // Permission code list
   // 权限代码列表
   jobList: Recordable[];
   //当前任务信息
   taskInfo:Recordable;
+  disabled:boolean;
   relatedTasks: RelatedTask[],
   // //任务列表
   // taskList:TaskInfo[];
@@ -41,6 +43,7 @@ export const useTaskStore = defineStore({
   state: (): TaskState => ({
     // 我的Job列表
     taskInfo:{},
+    disabled:true,
     relatedTasks:[],
     curJobID:0,
     curTaskId:0,
@@ -57,6 +60,9 @@ export const useTaskStore = defineStore({
     curUserID:4
   }),
   getters: {
+    getDisabled(state){
+      return state.disabled;
+    },
     getJobList(state){
       return state.jobList;
     },
@@ -80,15 +86,14 @@ export const useTaskStore = defineStore({
       console.log('job by user data:',data)
       this.jobList = data
     },
-    setCurTaskId(curTaskId) {
-      this.curTaskId = curTaskId
-      this.setTaskInfo(this.curTaskId)
-    },
-    async setTaskInfo(taskId) {
+    // setCurTaskId(curTaskId) {
+    //   this.curTaskId = curTaskId
+    //   this.setTaskInfo(this.curTaskId)
+    // },
+    async setTaskInfo(taskInfo) {
       //TODO
-      const data = await taskDetailApi(taskId)
-      this.taskInfo = data
-      console.log('taskInfo data===>',data)
+      this.taskInfo = taskInfo
+      console.log('taskInfo data===>',taskInfo)
     },
     async setRelatedTasks(userId) {
       //TODO
@@ -101,12 +106,17 @@ export const useTaskStore = defineStore({
       console.log('==========filterInfo=>',filterInfo);
       this.filterInfo = filterInfo
     },
+    setDisabled(isDisabled:boolean) {
+      //TODO
+      console.log('==========disabled=>',isDisabled);
+      this.disabled = isDisabled
+    },
     init(){
       //根据当前用户获取关联Job列表
-      this.setjobList(1)
+      // this.setjobList(1)
       //根据用户Job激活状态选取默认Job
       //根据Job获取任务列表
-      this.setTaskInfo(4)
+      // this.setTaskInfo(4)
       //获取默认显示的任务信息
       this.setRelatedTasks(4)
     }

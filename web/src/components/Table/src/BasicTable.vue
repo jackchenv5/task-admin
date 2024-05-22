@@ -330,10 +330,13 @@
   @border-color: #cecece4d;
 
   @prefix-cls: ~'@{namespace}-basic-table';
+  .ant-table-cell-row-havor {
+      background-color: #262626;
+  }
 
   [data-theme='dark'] {
-    .ant-table-tbody > tr:hover.ant-table-row-selected > td,
-    .ant-table-tbody > tr.ant-table-row-selected td {
+    .ant-table-tbody > tr:hover > td,
+    .ant-table-tbody > tr.ant-table-cell-row-havor td {
       background-color: #262626;
     }
   }
@@ -393,9 +396,9 @@
         border-bottom: none;
       }
 
-      //.ant-table-tbody > tr.ant-table-row-selected td {
-      //background-color: fade(@primary-color, 8%) !important;
-      //}
+      .ant-table-tbody > tr.ant-table-row-selected td {
+      background-color: fade(@primary-color, 8%) !important;
+      }
     }
 
     .ant-table-wrapper .ant-pagination {
