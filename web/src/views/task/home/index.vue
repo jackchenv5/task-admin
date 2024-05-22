@@ -1,11 +1,10 @@
 <template>
   <PageWrapper>
-    <div class="flex" >
+    <div class="flex h-full" >
     <!-- <div class="flex flex-col justify-center ">
       <Button size="large" danger type="primary" >下发当前任务</Button>
     </div> -->
-    <div style="width: 0%;"><p ></p></div>
-    <div class="flex flex-1  justify-start items-center" style="width: 100%;">
+    <div class="flex flex-1  justify-start items-center w-full" >
       <p class="font-bold mt-3">开始：</p>
       <DatePicker v-model:value="filterInfo.start_time" :format="dateFormat" size="middle" style="width: 115px"/>
       <p class="font-bold mt-3 ml-4">截止：</p>
@@ -22,7 +21,7 @@
   </div>
     <div class="justify-end mr-2"><Button size="middle" danger type="primary" >下发当前任务</Button></div>
   </div>
-    <div class="lg:flex  mt-1" style="min-width: 1357px!important">
+    <div class="lg:flex  mt-1 h-full" style="min-width: 1357px!important">
       <div style="width: 18%;" class="mr-2">
         <div class="flex mt-4 flex-col">
           <div class="flex flex-row flex-grow-2" style="height:18vh">
@@ -51,9 +50,8 @@
           <p>剩余总工时：8/22 天</p>
         </div>
       </div>
-      <div style="width:82%" >
+      <div style="width:82%;" >
         <TaskTable/>
-
       </div>
 
     </div>

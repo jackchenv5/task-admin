@@ -305,7 +305,7 @@
     // 刷新
     await methods.reload()
     const data = methods.getDataSource()
-    const curRow = data[0]
+    const curRow = data[data.length-1]
     currentEditKeyRef.value = curRow.key
     curRow.onEdit?.(true);
   }
@@ -324,11 +324,4 @@
   const handleChange = (value: string[]) => {
   console.log(`selected ${value}`);
 };
-const selectedUser = ref(['a1', 'b2']);
 </script>
-
-<style>
-.ant-table-row-selected>td {
-    background: #a5d3f0;
-}
-</style>
