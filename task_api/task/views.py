@@ -107,7 +107,6 @@ class TaskViewSet(viewsets.ModelViewSet):
         filtered_tasks = task_filter.qs  
 
         # 如果提供了group_id，则进一步过滤tasks  
-        print('group_id:',group_id)
         if group_id:  
             try:  
                 group = Group.objects.get(id=group_id)  
@@ -116,7 +115,8 @@ class TaskViewSet(viewsets.ModelViewSet):
             except Group.DoesNotExist:  
                 # 处理组不存在的情况  
                 return Response({"error": "Group not found"}, status=status.HTTP_404_NOT_FOUND)  
-
+        #排序 id降序
+        filtered_tasks = filtered_tasks.order_by('-pk')
         # 使用TaskSerializer序列化查询集  
         serializer = TaskSerializer(filtered_tasks, many=True)  
 

@@ -4,8 +4,16 @@ import {
 
 import {taskListApi,categoryListApi, taskStatusListApi } from '@/api/task/task';
 import { userListApi } from '@/api/task/user';
+import {
+  BasicTable,
+  useTable,
+  TableAction,
+  ActionItem,
+  EditRecordRow,
+  ColumnChangeParam,
+} from '@/components/Table';
 
-export const columns: BasicColumn[] = [
+const columns: BasicColumn[] = [
   {
     title: 'ID',
     dataIndex: 'id',
@@ -105,3 +113,31 @@ width: 150,
     },
   },
 ];
+
+
+export const [registerTable,methods] = useTable({
+  // title: '可编辑行示例',
+  // titleHelpMessage: [
+  //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
+  // ],
+  api: taskListApi,
+  columns: columns,
+  canResize: true,
+  // resizeHeightOffset:200,
+  bordered: false,
+  showIndexColumn: false,
+  showTableSetting: true,
+  tableSetting: { fullScreen: false },
+  actionColumn: {
+    width: 160,
+    title: 'Action',
+    dataIndex: 'action',
+  },
+  pagination:{
+    defaultPageSize: 100,
+    pageSize: 100,
+    hideOnSinglePage: false,
+    showSizeChanger: false,
+    showQuickJumper: false
+  }
+});

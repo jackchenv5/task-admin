@@ -24,18 +24,16 @@
   import { ref,computed,watch } from 'vue';
   import {
     BasicTable,
-    useTable,
     TableAction,
     ActionItem,
     EditRecordRow,
-    ColumnChangeParam,
   } from '@/components/Table';
 
   import { cloneDeep,debounce  } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
-  import {columns} from './tableConfig'
-  import {taskListApi} from '@/api/task/task';
-
+  import {registerTable,methods} from './tableConfig'
+  import {taskAddApi,taskDeleteApi,taskModifyApi} from '@/api/task/task';
+  import { userListApi } from '@/api/task/user';
   import {Modal} from 'ant-design-vue';
   import { useTaskStore } from '@/store/modules/task';
   import  ApiMultiSelect  from '@/components/Form/src/components/ApiMultiSelect.vue'
@@ -55,6 +53,8 @@
   
   const currentEditKeyRef = ref('');
   const currentCopyRow = ref();
+  const isDraft = ref(true);
+
 
   watch(currentEditKeyRef,()=>{
     console.log('currentEditKeyRef',currentEditKeyRef.value)
@@ -65,32 +65,6 @@
       }
   })
   
-  const [registerTable,methods] = useTable({
-    // title: '可编辑行示例',
-    // titleHelpMessage: [
-    //   '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
-    // ],
-    api: taskListApi,
-    columns: columns,
-    canResize: true,
-    // resizeHeightOffset:200,
-    bordered: false,
-    showIndexColumn: false,
-    showTableSetting: true,
-    tableSetting: { fullScreen: false },
-    actionColumn: {
-      width: 160,
-      title: 'Action',
-      dataIndex: 'action',
-    },
-    pagination:{
-      defaultPageSize: 100,
-      pageSize: 100,
-      hideOnSinglePage: false,
-      showSizeChanger: false,
-      showQuickJumper: false
-    }
-  });
 
   function handleEdit(record: EditRecordRow) {
     currentEditKeyRef.value = record.key;
@@ -114,13 +88,10 @@
           content:record.content,challenge:record.challenge,feedback:record.feedback
         }
         //没修改
-        console.log('record',record)
-        console.log('data',data)
         if(data.receiver_name !== "未指定" && (!record.receiver || record.receiver_name !== data.receiver_name)) postData['receiver'] = data.receiver_name
         if(data.category_name !== "未指定" && (!record.category || record.category_name !== data.category_name || record.category === record.category_name)) postData['category'] = data.category_name
         // if(data.status_name !== "未指定" && (!record.status || record.status !== data.status_name)) postData['status'] = data.status_name
         if(data.related_task_name !== "未指定" && (!record.related_task || record.related_task_name !== data.related_task_name)) postData['related_task'] = data.related_task_name
-        console.log(postData);
         //TODO 此处将数据提交给服务器保存
         taskModifyApi(record.id,postData)
         // ...
@@ -210,10 +181,19 @@
     // 刷新
     await methods.reload()
     const data = methods.getDataSource()
-    const curRow = data[data.length-1]
+    const curRow = data[0]
     currentEditKeyRef.value = curRow.key
     curRow.onEdit?.(true);
   }
+
+  async function handleDraft(){
+    const data = methods.getDataSource();
+    data.forEach(x=>{
+      taskModifyApi(x.id,{status:1});
+    })
+    // methods.reload()
+  }
+
 
   //复制按钮
   const open = ref<boolean>(false);
@@ -252,9 +232,8 @@
       taskAddApi(postData);
     })
     open.value = false;
+    isDraft.value = false;
     methods.reload({filterInfo:{creater:currentCopyRow.value['creater'],status:3}});
   };
-  const handleChange = (value: string[]) => {
-  console.log(`selected ${value}`);
-};
+
 </script>
