@@ -90,7 +90,7 @@
         //没修改
         if(data.receiver_name !== "未指定" && (!record.receiver || record.receiver_name !== data.receiver_name)) postData['receiver'] = data.receiver_name
         if(data.category_name !== "未指定" && (!record.category || record.category_name !== data.category_name || record.category === record.category_name)) postData['category'] = data.category_name
-        // if(data.status_name !== "未指定" && (!record.status || record.status !== data.status_name)) postData['status'] = data.status_name
+        if(data.status_name !== "未指定" && (!record.status || record.status !== data.status_name)) postData['status'] = data.status_name
         if(data.related_task_name !== "未指定" && (!record.related_task || record.related_task_name !== data.related_task_name)) postData['related_task'] = data.related_task_name
         //TODO 此处将数据提交给服务器保存
         taskModifyApi(record.id,postData)
@@ -179,7 +179,7 @@
   async function handleCreate(){
     await taskAddApi()
     // 刷新
-    await methods.reload()
+    await methods.reload({page: 1})
     const data = methods.getDataSource()
     const curRow = data[0]
     currentEditKeyRef.value = curRow.key
