@@ -17,9 +17,9 @@
     <ApiSelect style="width: 115px" v-model:value="filterInfo.status" :api="taskStatusListApi" result-field="items" value-field="id" label-field="name"></ApiSelect>
     <p class="mt-3 ml-4 font-bold">查询：</p>
     <Input v-model:value="filterInfo.search_text" style="min-width: 200px;width: 300px" placeholder="支持任务名、工作内容、挑战目标、任务自述"/>
-    <Button @click="cleanFilter">清空</Button>  
+    <Button @click="cleanFilter" class="ml-4">清空</Button>  
   </div>
-    <div class="justify-end mr-2"><Button size="middle" danger type="primary" >下发当前任务</Button></div>
+    <!-- <div class="justify-end mr-2"><Button size="middle" danger type="primary" >下发当前任务</Button></div> -->
   </div>
     <div class="lg:flex  mt-1 h-full" style="min-width: 1357px!important">
       <div style="width: 18%;" class="mr-2">

@@ -171,18 +171,22 @@
     columns: columns,
     canResize: true,
     // resizeHeightOffset:200,
-    bordered: true,
+    bordered: false,
     showIndexColumn: false,
     showTableSetting: true,
     tableSetting: { fullScreen: false },
-    onColumnsChange: (data: ColumnChangeParam[]) => {
-      console.log('ColumnsChanged', data);
-    },
     actionColumn: {
       width: 160,
       title: 'Action',
       dataIndex: 'action',
     },
+    pagination:{
+      defaultPageSize: 100,
+      pageSize: 100,
+      hideOnSinglePage: true,
+      showSizeChanger: false,
+      showQuickJumper: false
+    }
   });
 
   function handleEdit(record: EditRecordRow) {
