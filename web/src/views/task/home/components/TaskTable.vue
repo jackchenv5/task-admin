@@ -21,7 +21,7 @@
     </Modal>
 </template>
 <script lang="ts" setup>
-  import { ref,computed,watch } from 'vue';
+  import { ref,watch } from 'vue';
   import {
     BasicTable,
     TableAction,
@@ -29,7 +29,7 @@
     EditRecordRow,
   } from '@/components/Table';
 
-  import { cloneDeep,debounce  } from 'lodash-es';
+  import { cloneDeep  } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
   import {registerTable,methods} from './tableConfig'
   import {taskAddApi,taskDeleteApi,taskModifyApi} from '@/api/task/task';
@@ -57,10 +57,6 @@
       isDraftDisabled.value = true
     }
     methods.reload({filterInfo:filterInfo})
-    // debounce(()=>{
-    //   methods.reload()
-    // },300)
-    
   })
 
 
@@ -205,6 +201,16 @@
     })
   }
 
+  async function handlePublish(){
+    const data = methods.getDataSource();
+    const requsetAll:Promise<Recordable>[] = []
+    data.forEach(x=>{
+      requsetAll.push(taskModifyApi(x.id,{status:2}));
+    })
+    Promise.all(requsetAll).then(()=>{
+      methods.reload()
+    })
+  }
 
   //复制按钮
   const open = ref<boolean>(false);

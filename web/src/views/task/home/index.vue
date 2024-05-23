@@ -45,9 +45,9 @@
         </div>
         <!-- <div>
           <p>执行人：陈成</p>
-          <p>关联任务：</p>
-          <p v-for="item in curRelatedTasks"><a>{{ `${item.name}:${item.start_time}~${item.deadline_time}` }}</a></p>
-          <p>剩余总工时：8/22 天</p>
+          <p>关联任务：</p> -->
+          <!-- <p v-for="item in curRelatedTasks"><a>{{ `${item.name}:${item.start_time}~${item.deadline_time}` }}</a></p> -->
+          <!-- <p>剩余总工时：8/22 天</p>
         </div> -->
       </div>
       <div style="width:82%;" >
@@ -60,22 +60,19 @@
 </template>
 <script lang="ts" setup>
   import { ref,computed,watch,onMounted,reactive } from 'vue';
-  import {Textarea,Card,Button,TypographyTitle,RangePicker,Select,SelectOption,DatePicker,Input } from 'ant-design-vue';
+  import {Textarea,Button,DatePicker,Input } from 'ant-design-vue';
   import { PageWrapper } from '@/components/Page';
-  import Header from './components/Header.vue';
   import TaskTable from './components/TaskTable.vue';
   import  ApiSelect  from '@/components/Form/src/components/ApiSelect.vue'
   import  ApiSearchSelect  from '@/components/Form/src/components/ApiSearchSelect.vue'
-  import type { Dayjs } from 'dayjs';
   import { groupListApi } from '@/api/task/group';
   import { userListApi } from '@/api/task/user';
-  import { taskAddApi, taskDeleteApi, taskListApi, taskModifyApi,categoryListApi, taskStatusListApi } from '@/api/task/task';
+  import { taskStatusListApi } from '@/api/task/task';
 
   import { useTaskStore } from '@/store/modules/task';
   const store = useTaskStore()
   const disabled = computed(()=>store.getDisabled)
   const curTaskInfo = computed(()=>store.getTaskInfo)
-  const curRelatedTasks = computed(()=> store.getRelatedTasksList)
   const dateFormat = 'YYYY-MM-DD';
   const filterInfo = reactive({
       receiver:"",
@@ -92,10 +89,7 @@
     }  
   }  
   watch(filterInfo,()=>{
-    console.log('filterInfo===>',filterInfo)
     store.setFilterInfo(filterInfo)
-    // const data = taskListApi(buildQueryParams(filterInfo))
-    // console.log('===========data:',data)
   })
   onMounted(() => {
     store.init()
@@ -106,18 +100,4 @@
   setTimeout(() => {
     loading.value = false;
   }, 1500);
-
-  function buildQueryParams(paramsObj) {  
-  const queryParams = [];  
-  
-  for (let key in paramsObj) {  
-    if (paramsObj.hasOwnProperty(key) && paramsObj[key] !== '') {  
-      // 转换 key 为 snake_case（如果需要） 
-      console.log('key','data',key,paramsObj[key]);
-      const snakeCaseKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();  
-      queryParams.push(encodeURIComponent(snakeCaseKey) + '=' + encodeURIComponent(paramsObj[key]));  
-    }  
-  }  
-  return queryParams.join('&');  
-}  
 </script>
