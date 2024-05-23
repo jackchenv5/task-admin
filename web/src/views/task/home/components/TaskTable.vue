@@ -3,7 +3,7 @@
     <BasicTable @register="registerTable" @edit-change="onEditChange" @row-click="handleRowClick"  >
       <template #toolbar>
         <a-button type="primary" @click="handleCreate"> 新增任务 </a-button>
-        <a-button type="primary" @click="handleDraft" :disabled="isDraft"> 转为未发布 </a-button>
+        <a-button type="primary" @click="handleDraft" :disabled="isDraftDisabled"> 转为未发布 </a-button>
         <a-button type="primary" @click="handlePublish" > 发布 </a-button>
       </template>
       <template #bodyCell="{ column, record }">
@@ -41,19 +41,24 @@
   const store = useTaskStore();
   const filterInfo = store.filterInfo
 
+  
+  const { createMessage: msg } = useMessage();
+  
+  const currentEditKeyRef = ref('');
+  const currentCopyRow = ref();
+  const isDraftDisabled = ref(true);
+
+
   watch(filterInfo,()=>{
+    if(filterInfo.status === '3'){
+        isDraftDisabled.value = false
+    }
     methods.reload({filterInfo:filterInfo})
     // debounce(()=>{
     //   methods.reload()
     // },300)
     
   })
-
-  const { createMessage: msg } = useMessage();
-  
-  const currentEditKeyRef = ref('');
-  const currentCopyRow = ref();
-  const isDraft = ref(true);
 
 
   watch(currentEditKeyRef,()=>{
@@ -235,7 +240,7 @@
       taskAddApi(postData);
     })
     open.value = false;
-    isDraft.value = false;
+    isDraftDisabled.value = false;
     methods.reload({filterInfo:{creater:currentCopyRow.value['creater'],status:3}});
   };
 
