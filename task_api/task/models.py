@@ -45,7 +45,7 @@ class AbstractTask(models.Model):
     # 任务类型
     # 指向 TaskCategory 模型。related_name="tasks" 意味着，您可以通过 TaskCategory 实例的 tasks 属性来访问属于该类别的所有任务
     # on_delete=models.CASCADE 到 ForeignKey 字段。这是一个很好的做法，因为它指定了当关联的 TaskCategory 对象被删除时，相关的 Task 对象也应该被删除（级联删除）
-    category = models.ForeignKey(TaskCategory, related_name="%(class)s",on_delete=models.SET_NULL,null=True)
+    category = models.ForeignKey(TaskCategory, related_name="%(class)s",on_delete=models.SET_DEFAULT,default=1)
     
     # 任务内容
     content = models.CharField(max_length=2056,null=True)

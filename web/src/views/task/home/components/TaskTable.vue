@@ -188,10 +188,13 @@
 
   async function handleDraft(){
     const data = methods.getDataSource();
+    const requsetAll:Promise<Recordable>[] = []
     data.forEach(x=>{
-      taskModifyApi(x.id,{status:1});
+      requsetAll.push(taskModifyApi(x.id,{status:1}));
     })
-    // methods.reload()
+    Promise.all(requsetAll).then(()=>{
+      methods.reload()
+    })
   }
 
 
