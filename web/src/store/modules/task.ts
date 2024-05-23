@@ -14,11 +14,11 @@ interface RelatedTask {
   workload:string;
 }
 interface FilterInfo {
-  receiver:string;
+  receiver:number;
   start_time:string;
   deadline_time:string;
-  status:string;
-  group:string;
+  status:number;
+  group:number;
   search_text:string;
 }
 

@@ -50,8 +50,11 @@
 
 
   watch(filterInfo,()=>{
-    if(filterInfo.status === '3'){
+    console.log(filterInfo)
+    if(filterInfo.status === 3){
         isDraftDisabled.value = false
+    }else{
+      isDraftDisabled.value = true
     }
     methods.reload({filterInfo:filterInfo})
     // debounce(()=>{

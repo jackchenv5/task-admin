@@ -43,12 +43,12 @@
             </div>
           </div>
         </div>
-        <div>
+        <!-- <div>
           <p>执行人：陈成</p>
           <p>关联任务：</p>
           <p v-for="item in curRelatedTasks"><a>{{ `${item.name}:${item.start_time}~${item.deadline_time}` }}</a></p>
           <p>剩余总工时：8/22 天</p>
-        </div>
+        </div> -->
       </div>
       <div style="width:82%;" >
         <TaskTable/>
