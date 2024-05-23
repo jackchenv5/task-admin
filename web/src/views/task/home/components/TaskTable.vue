@@ -3,8 +3,8 @@
     <BasicTable @register="registerTable" @edit-change="onEditChange" @row-click="handleRowClick"  >
       <template #toolbar>
         <a-button type="primary" @click="handleCreate"> 新增任务 </a-button>
-        <a-button type="primary" @click="handleCreate" disabled> 转为未发布 </a-button>
-        <a-button type="primary" @click="handleCreate" disabled> 发布 </a-button>
+        <a-button type="primary" @click="handleDraft" :disabled="isDraft"> 转为未发布 </a-button>
+        <a-button type="primary" @click="handlePublish" > 发布 </a-button>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
@@ -26,22 +26,23 @@
     BasicTable,
     useTable,
     TableAction,
-    BasicColumn,
     ActionItem,
     EditRecordRow,
     ColumnChangeParam,
   } from '@/components/Table';
-  import { taskAddApi, taskDeleteApi, taskListApi, taskModifyApi,categoryListApi, taskStatusListApi } from '@/api/task/task';
+
   import { cloneDeep,debounce  } from 'lodash-es';
   import { useMessage } from '@/hooks/web/useMessage';
-  import { userListApi } from '@/api/task/user';
-  import {Modal,Select} from 'ant-design-vue';
+  import {columns} from './tableConfig'
+  import {taskListApi} from '@/api/task/task';
+
+  import {Modal} from 'ant-design-vue';
   import { useTaskStore } from '@/store/modules/task';
   import  ApiMultiSelect  from '@/components/Form/src/components/ApiMultiSelect.vue'
   import _ from 'lodash-es';  
   const store = useTaskStore();
-  const curFilterInfo = computed(() => store.filterInfo)
   const filterInfo = store.filterInfo
+
   watch(filterInfo,()=>{
     methods.reload({filterInfo:filterInfo})
     // debounce(()=>{
@@ -49,106 +50,7 @@
     // },300)
     
   })
-  const columns: BasicColumn[] = [
-        {
-          title: 'ID',
-          dataIndex: 'id',
-          width: 80,
-          fixed: 'left',
-        },
-        {
-        title: '名称',
-        dataIndex: 'name',
-        editRow: true,
-        width: 200,
-        fixed: 'left',
-      },
-      {
-          title: '下发者',
-          dataIndex: 'creater_name',
-          width: 150,
-        },
-        {
-          title: '执行者',
-          dataIndex: 'receiver_name',
-          editRow: true,
-          width: 150,
-          editComponent: 'ApiSearchSelect',
-          editComponentProps: {
-            api: userListApi,
-            resultField: 'items',
-            labelField: 'username',
-            valueField: 'id',
-          },
-        },
-        {
-      title: '开始时间',
-      dataIndex: 'start_time',
-      editRow: true,
-      editComponent: 'DatePicker',
-      editComponentProps: {
-        valueFormat: 'YYYY-MM-DD',
-        format: 'YYYY-MM-DD',
-      },
-      width: 150,
-    },
-    {
-      title: '截止时间',
-      dataIndex: 'deadline_time',
-      editRow: true,
-      editComponent: 'DatePicker',
-      editComponentProps: {
-        valueFormat: 'YYYY-MM-DD',
-        format: 'YYYY-MM-DD',
-      },
-      width: 150,
-    },
-      {
-        title: '状态',
-        dataIndex: 'status_name',
-        editRow: true,
-        editComponent: 'ApiSelect',
-        editComponentProps: {
-          api: taskStatusListApi,
-          resultField: 'items',
-          labelField: 'name',
-          valueField: 'id',
-        },
-        width: 150,
-      },
-      {
-        title: '工作量',
-        dataIndex: 'workload',
-        editRow: true,
-        width: 60,
-      },
-      {
-        title: '关联任务ID',
-        dataIndex: 'related_task_name',
-        editRow: true,
-        width: 200,
-        editComponent: 'ApiSearchSelect',
-        editComponentProps: {
-          api: taskListApi,
-          resultField: 'items',
-          labelField: 'name',
-          valueField: 'id',
-        },
-      },
-      {
-          title: '项目',
-          dataIndex: 'category_name',
-          editRow: true,
-          width: 400,
-          editComponent: 'ApiSelect',
-          editComponentProps: {
-            api: categoryListApi,
-            resultField: 'items',
-            labelField: 'name',
-            valueField: 'id',
-          },
-        },
-  ];
+
   const { createMessage: msg } = useMessage();
   
   const currentEditKeyRef = ref('');
@@ -162,6 +64,7 @@
         store.setDisabled(false)
       }
   })
+  
   const [registerTable,methods] = useTable({
     // title: '可编辑行示例',
     // titleHelpMessage: [
@@ -183,7 +86,7 @@
     pagination:{
       defaultPageSize: 100,
       pageSize: 100,
-      hideOnSinglePage: true,
+      hideOnSinglePage: false,
       showSizeChanger: false,
       showQuickJumper: false
     }
@@ -326,32 +229,30 @@
     open.value = true;
   };
   const handleOk = (e: MouseEvent) => {
-    console.log(e);
     //获取用户列表
-    console.log('selectedUser.value',selectedUser.value)
-
     //获取行信息，替换user
-    console.log('currentCopyRow.value',currentCopyRow.value)
     //状态设置为草稿
+        //更新表
     selectedUser.value.forEach(x=>{
       const postData = {};
       const postItem = ["name","receiver","creater","category","content","challenge","feedback","start_time","deadline_time","workload","status","related_task"]
       postItem.forEach(
         y=>{
           if(y === 'receiver'){
-            postData['receiver'] = x
+            postData['receiver'] = x;
           }else if(y === 'status'){
-            postData['status'] = 3 //草稿
+            postData['status'] = 3; //草稿
           }else if(y === 'creater'){
-            postData['creater'] = 1 //零时
+            postData['creater'] = 1; //零时
           }else{
-            postData[y] = currentCopyRow.value[y]
+            postData[y] = currentCopyRow.value[y];
           }
-          taskAddApi(postData)
         }
       )
+      taskAddApi(postData);
     })
     open.value = false;
+    methods.reload({filterInfo:{creater:currentCopyRow.value['creater'],status:3}});
   };
   const handleChange = (value: string[]) => {
   console.log(`selected ${value}`);

@@ -65,7 +65,7 @@ export const taskModifyApi =  (pk,data) =>
   });
 
 
-export const taskAddApi = (params = { name: '请输入名称' }) => {  
+export const taskAddApi = (params:Recordable = { name: '请输入名称' }) => {  
   // 使用默认参数语法来提供默认值  
   return api.post({  
       url: `${Api.TASK_LIST}/`, // 直接使用Api.TASK_LIST常量  

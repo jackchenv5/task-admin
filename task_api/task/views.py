@@ -43,9 +43,9 @@ class TaskFilter(filters.FilterSet):
 
 # 自定义分页类（可选，如果需要自定义每页显示的条目数）  
 class StandardPagination(PageNumberPagination):  
-    page_size = 10  # 设置每页显示的条目数  
+    # page_size = 10  # 设置每页显示的条目数  
     page_size_query_param = 'pageSize'  # 允许客户端通过查询参数来覆盖默认设置  
-    max_page_size = 100  # 客户端请求的最大条目数  
+    # max_page_size = 100  # 客户端请求的最大条目数  
 
 
 class TaskStatusViewSet(viewsets.ModelViewSet):
